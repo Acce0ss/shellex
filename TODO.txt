@@ -1,0 +1,44 @@
+v.0.1:
+
+-Sorting:
+    - by name X
+    - by last run time X
+    - by creation time X
+    - by times ran X
+
+-storage:
+    -insert single command X
+    -remove single command X
+    -update single command X
+
+-viewing commands
+    -proper icons for running process
+    -type indicator
+    -polish date format
+
+-running a process
+    -create proper temporary script files X
+    -output page for background processes X
+    -exit codes X
+    -kill apps executed
+    -outputpage limit for lines
+    -individual lines in a listview
+    -copy line, copy all
+
+-single liners:
+    -edit as new X
+    -edit X
+
+-cover
+    -run new command
+
+v. 0.2:
+-script functionality
+    -new script -page
+    -edit script -page
+    -edit as new -function
+    -parameter setup
+
+-running a process
+    -add possibility to run detached
+    -bind runner type to each command
