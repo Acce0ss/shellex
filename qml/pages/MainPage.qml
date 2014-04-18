@@ -49,6 +49,8 @@ Page {
 
             PageHeader {
                 id: pageTitle
+                visible: !((root.orientation === Orientation.Landscape) ||
+                         (root.orientation === Orientation.LandscapeInverted))
                 title: qsTr("Shell Commands")
             }
 
@@ -101,7 +103,8 @@ Page {
 
                 id: commandsView
 
-                height: root.height - quickCommand.height - pageTitle.height - runnerChooser.height
+                height: root.height - quickCommand.height
+                        - (pageTitle.visible ? pageTitle.height : 0) - runnerChooser.height
                 width: parent.width
 
                 pressDelay: 0

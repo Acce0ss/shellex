@@ -9,20 +9,26 @@ Page {
 
     allowedOrientations: Orientation.All
 
-    SilicaFlickable {
+    SilicaListView {
+        id: outputList
         anchors.fill: parent
-        contentHeight: content.height
 
         PullDownMenu {
             MenuItem {
-                text: qsTr("Copy to clipboard")
+                text: qsTr("Clear all")
                 onClicked: {
-                    Clipboard.text = command.output;
+                    command.output.clear();
+                }
+            }
+            MenuItem {
+                text: qsTr("Copy all to clipboard")
+                onClicked: {
+                    Clipboard.text = command.output.outputString;
                 }
             }
         }
 
-        Column {
+        header: Column {
             id: content
 
             width: parent.width
@@ -31,23 +37,54 @@ Page {
                 title: qsTr("Output")
             }
 
-            Label {
+        }
 
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.leftMargin: Theme.paddingLarge
-                wrapMode: Text.WordWrap
-                text: command.output
-                font.pixelSize: Theme.fontSizeTiny
-            }
+        footer: BusyIndicator {
+            anchors.horizontalCenter: parent.horizontalCenter
+            running: Qt.application.active && command.isRunning
+        }
 
-            BusyIndicator {
-                anchors.horizontalCenter: parent.horizontalCenter
-                running: Qt.application.active && command.isRunning
+        model: command.output
+
+        spacing: Theme.paddingMedium
+
+        delegate: Component {
+            ListItem {
+                id: listItem
+
+                height: itemLabel.height
+                contentHeight: itemLabel.height
+
+                ListView.onRemove: animateRemoval(listItem)
+
+                Label {
+                    id: itemLabel
+                    anchors.centerIn: parent
+                    anchors.leftMargin: Theme.paddingLarge
+                    anchors.rightMargin: Theme.paddingLarge
+
+                    width: parent.width - 2*Theme.paddingLarge
+
+                    wrapMode: Text.WordWrap
+                    text: model.display
+                    color: listItem.highlighted ? Theme.highlightColor : Theme.primaryColor
+
+                    font.pixelSize: Theme.fontSizeTiny
+                }
+
+                onClicked: Clipboard.text = model.display;
+
             }
         }
 
         VerticalScrollDecorator {}
+    }
+
+    onStatusChanged: {
+        if(root.status === PageStatus.Active)
+        {
+           // outputList.scrollToBottom();
+        }
     }
 
 }

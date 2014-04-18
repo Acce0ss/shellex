@@ -5,8 +5,10 @@
 #include <QJsonObject>
 #include <QProcess>
 #include <QDateTime>
+
 #include "shellexecutor.h"
 
+class CommandOutputModel;
 
 class ShellCommand : public QObject
 {
@@ -19,7 +21,7 @@ class ShellCommand : public QObject
     Q_PROPERTY(QDateTime lastRunOn READ lastRunOn NOTIFY lastRunOnChanged)
     Q_PROPERTY(int runCount READ runCount NOTIFY runCountChanged)
 
-    Q_PROPERTY(QString output READ output NOTIFY outputChanged)
+    Q_PROPERTY(CommandOutputModel* output READ output)
 
     Q_PROPERTY(bool isRunning READ isRunning NOTIFY isRunningChanged)
     Q_PROPERTY(bool isStarting READ isStarting NOTIFY isStartingChanged)
@@ -73,7 +75,7 @@ public:
     unsigned int runCount() const;
     void setRunCount(unsigned int count);
 
-    QString output();
+    CommandOutputModel* output();
 
     bool isRunning() const;
     bool isStarting() const;
@@ -83,11 +85,7 @@ public:
 
     Q_INVOKABLE QJsonObject getAsJSONObject();
 
-
-
 signals:
-
-    void outputChanged();
 
     void nameChanged();
     void typeChanged();
@@ -130,7 +128,8 @@ private:
 
     unsigned int m_run_count;
 
-    QString m_output;
+    CommandOutputModel* m_output;
+
 };
 
 #endif // SHELLCOMMAND_H

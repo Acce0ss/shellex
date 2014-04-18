@@ -1,5 +1,3 @@
-#include "shellcommand.h"
-
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonValue>
@@ -11,10 +9,13 @@
 #include <QStandardPaths>
 #include <QDebug>
 
+#include "shellcommand.h"
+#include "commandoutputmodel.h"
+
 ShellCommand::ShellCommand(QObject *parent) :
     QObject(parent), m_name(""), m_type(SingleLiner), m_content(""), m_process(NULL),
     m_is_running(false), m_created_on(QDateTime::currentDateTime()), m_last_run_on(),
-    m_is_in_database(false), m_id(UINT_MAX), m_run_count(0), m_output("")
+    m_is_in_database(false), m_id(UINT_MAX), m_run_count(0), m_output(new CommandOutputModel(this))
 {
 }
 
@@ -22,7 +23,7 @@ ShellCommand::ShellCommand(QObject *parent) :
 ShellCommand::ShellCommand(QObject *parent, QString name, CommandType type, QString content) :
     QObject(parent), m_name(name), m_type(type), m_content(content), m_process(NULL),
     m_is_running(false), m_created_on(QDateTime::currentDateTime()), m_last_run_on(),
-    m_is_in_database(false), m_id(UINT_MAX), m_run_count(0), m_output("")
+    m_is_in_database(false), m_id(UINT_MAX), m_run_count(0), m_output(new CommandOutputModel(this))
 {
 }
 
@@ -104,7 +105,7 @@ void ShellCommand::setRunCount(unsigned int count)
     }
 }
 
-QString ShellCommand::output()
+CommandOutputModel *ShellCommand::output()
 {
     return m_output;
 }
@@ -232,7 +233,7 @@ bool ShellCommand::startProcess(int executorType)
         processParam = "";
     }
 
-    m_output = trUtf8("Command %1 starting...\n").arg(m_name);
+    m_output->append(trUtf8("Command %1 starting...").arg(m_name));
 
     connect(m_process, static_cast<void (QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, &ShellCommand::processFinished);
     connect(m_process, &QProcess::readyReadStandardOutput, this, &ShellCommand::readStandardOutput);
@@ -257,6 +258,15 @@ void ShellCommand::stopProcess()
 {
     if(m_process != NULL)
     {
+        Q_PID pid = m_process->pid();
+
+        QStringList params;
+        params << "-P";
+        params << QString::number(pid);
+        QProcess killer;
+        killer.start("pkill", params );
+        killer.waitForFinished();
+
         m_process->close();
     }
 }
@@ -264,21 +274,32 @@ void ShellCommand::stopProcess()
 void ShellCommand::processFinished(int code, QProcess::ExitStatus status)
 {
 
-    m_output.append(trUtf8("\nProgram returned exit code %1").arg(QString::number(code)));
-    emit outputChanged();
+    m_output->append(trUtf8("Program returned exit code %1").arg(QString::number(code)));
+
     emit isRunningChanged();
+
+    m_process->deleteLater();
+    m_process = NULL;
 }
 
 void ShellCommand::readStandardOutput()
 {
-    m_output.append(m_process->readAllStandardOutput());
-    emit outputChanged();
+    QStringList outputs = QString(m_process->readAllStandardOutput())
+            .split(QRegExp("[\r\n]"),QString::SkipEmptyParts);
+    for(int i=0; i < outputs.length(); i++)
+    {
+        m_output->append(outputs.at(i));
+    }
 }
 
 void ShellCommand::readStandardError()
 {
-    m_output.append(m_process->readAllStandardError());
-    emit outputChanged();
+    QStringList outputs = QString(m_process->readAllStandardError())
+            .split(QRegExp("[\r\n]"),QString::SkipEmptyParts);
+    for(int i=0; i < outputs.length(); i++)
+    {
+        m_output->append(outputs.at(i));
+    }
 }
 
 
@@ -390,6 +411,8 @@ ShellCommand::~ShellCommand()
         m_process->waitForFinished();
         m_process->deleteLater();
     }
+
+    m_output->deleteLater();
 
 }
 
