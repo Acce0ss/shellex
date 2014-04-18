@@ -42,3 +42,8 @@ v. 0.2:
 -running a process
     -add possibility to run detached
     -bind runner type to each command
+
+v. 0.x
+
+integration
+    -integrate app functionality into events view as an UI patch
