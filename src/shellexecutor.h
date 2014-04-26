@@ -16,6 +16,7 @@ class ShellExecutor : public QObject
     Q_OBJECT
 
     Q_PROPERTY(CommandsModel* commandsModel READ commandsModel NOTIFY commandsModelChanged)
+    Q_PROPERTY(bool fingertermInstalled READ fingertermInstalled NOTIFY fingertermInstalledChanged)
 
     Q_ENUMS(Executor)
 
@@ -34,10 +35,12 @@ public:
 
     CommandsModel *commandsModel();
 
+    bool fingertermInstalled();
+
 signals:
 
     void commandsModelChanged();
-    void sortTypeChanged();
+    void fingertermInstalledChanged();
 public slots:
 
     void initFromArray(QVariantList array);
@@ -68,6 +71,8 @@ private slots:
     void refreshCommandsModel();
 private:
     CommandsModel* m_commands;
+
+    bool m_fingerterm_installed;
 };
 
 #endif // SHELLEXECUTOR_H

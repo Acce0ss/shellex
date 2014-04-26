@@ -8,10 +8,6 @@ Item {
 
     property ShellExecutor shell
 
-    property var commandList: [{name:'top',type:'SingleLiner',content:'top'},
-                                {name:'df -h',type:'SingleLiner',content:'df -h'},
-                                {name:'du -sh /home/nemo/Pictures',type:'SingleLiner',content:'du -sh /home/nemo/Pictures'}]
-
     property var db
 
     //return pointer to added command if insert success

@@ -7,16 +7,32 @@
 #include <QVariantList>
 #include <QJsonArray>
 #include <QJsonObject>
-#include <QtAlgorithms>
 
 #include "shellexecutor.h"
 #include "shellcommand.h"
 #include "commandsmodel.h"
 
 ShellExecutor::ShellExecutor(QObject *parent) :
-    QObject(parent), m_commands(new CommandsModel(this))
+    QObject(parent), m_commands(new CommandsModel(this)), m_fingerterm_installed(false)
 {
     connect(m_commands, &CommandsModel::commandsModelChanged, this, &ShellExecutor::refreshCommandsModel);
+
+    QProcess findFingerterm;
+
+    findFingerterm.setProcessChannelMode(QProcess::MergedChannels);
+    findFingerterm.start("which", QStringList() << "fingerterm");
+
+    findFingerterm.waitForStarted();
+
+    QString output;
+    while(findFingerterm.waitForReadyRead())
+    {
+        output.append(QString(findFingerterm.readAll()));
+    }
+
+    qDebug() << output;
+    m_fingerterm_installed = !(output.contains("which: no"));
+    emit fingertermInstalledChanged();
 }
 
 
@@ -77,6 +93,11 @@ void ShellExecutor::stopAllCommands()
 CommandsModel* ShellExecutor::commandsModel()
 {
     return m_commands;
+}
+
+bool ShellExecutor::fingertermInstalled()
+{
+    return m_fingerterm_installed;
 }
 
 

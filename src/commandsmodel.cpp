@@ -1,4 +1,5 @@
 #include <QDebug>
+#include <QtAlgorithms>
 
 #include "commandsmodel.h"
 #include "shellcommand.h"

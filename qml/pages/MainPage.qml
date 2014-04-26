@@ -69,13 +69,24 @@ Page {
                 label: qsTr("Run ")
 
                 menu: ContextMenu {
-                    MenuItem{
-                        text: qsTr("in Fingerterm")
-                        property int value: ShellExecutor.Fingerterm
-                    }
+
                     MenuItem{
                         text: qsTr("as app child process")
                         property int value: ShellExecutor.Script
+                    }
+
+                    MenuItem{
+                        enabled: shell.fingertermInstalled
+                        text: qsTr("in Fingerterm")
+                        property int value: ShellExecutor.Fingerterm
+                        Label {
+                            visible: !parent.enabled
+                            anchors.bottom: parent.bottom
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            text: qsTr("Fingerterm is not installed")
+                            font.pixelSize: Theme.fontSizeTiny
+                            color: Theme.secondaryColor
+                        }
                     }
 
                 }
