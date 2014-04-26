@@ -52,11 +52,7 @@ Dialog {
             root.command.content = editField.text;
             root.command.name = editField.text;
             commandStore.updateCommand(root.command.getAsJSONObject());
-            if(root.modeller.sortType === ShellExecutor.ByName ||
-                    root.modeller.sortType === ShellExecutor.ByNameReverse)
-            {
-                root.modeller.reSortCommmands();
-            }
+
         }
     }
 

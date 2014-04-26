@@ -16,6 +16,8 @@ Page {
 
     SilicaFlickable {
 
+        id: rootFlickable
+
         anchors.fill: parent
 
         contentHeight: contentColumn.height
@@ -23,6 +25,13 @@ Page {
         pressDelay: 0
 
         PullDownMenu {
+            MenuItem {
+                text: qsTr("Close all running commands")
+                onClicked: {
+                    shell.stopAllCommands();
+                }
+            }
+
             MenuItem {
 
                 property string sorter: sortPage.sortName
@@ -57,15 +66,15 @@ Page {
             ComboBox {
                 id: runnerChooser
 
-                label: qsTr("Run in ")
+                label: qsTr("Run ")
 
                 menu: ContextMenu {
                     MenuItem{
-                        text: qsTr("Fingerterm")
+                        text: qsTr("in Fingerterm")
                         property int value: ShellExecutor.Fingerterm
                     }
                     MenuItem{
-                        text: qsTr("the background")
+                        text: qsTr("as app child process")
                         property int value: ShellExecutor.Script
                     }
 
@@ -130,12 +139,21 @@ Page {
                 }
 
                 ViewPlaceholder {
+                    anchors.centerIn: parent
                     text: qsTr("No commands to show yet")
                 }
 
                 VerticalScrollDecorator {}
             }
 
+        }
+    }
+
+    onStatusChanged: {
+        if(status === PageStatus.Active)
+        {
+            commandsView.pressDelay = 0;
+            rootFlickable.pressDelay = 0;
         }
     }
 }

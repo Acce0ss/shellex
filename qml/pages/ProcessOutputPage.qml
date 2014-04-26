@@ -2,12 +2,27 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 import harbour.shellex 1.0
 
+import "../"
+
 Page {
     id: root
 
+    objectName: "ProcessOutputPage"
+
     property ShellCommand command
 
+    property CommandsStore storageReference
+
     allowedOrientations: Orientation.All
+
+    function updateCommandHider() {
+
+        if(root.status === PageStatus.Active)
+        {
+            var updateObj = root.command.getAsJSONObject();
+            storageReference.updateCommandLastRunAndCount(updateObj);
+        }
+    }
 
     SilicaListView {
         id: outputList

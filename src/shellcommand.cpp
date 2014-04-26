@@ -160,6 +160,34 @@ QJsonObject ShellCommand::getAsJSONObject()
     return tempObj;
 }
 
+void ShellCommand::startDetached(int executorType)
+{
+    QString file = this->createRunnerScript();
+
+    if(file == "")
+    {
+        return;
+    }
+
+    QString processName = "fingerterm";
+    QString processParam = "-e";
+
+    if(executorType == (int)ShellExecutor::Script)
+    {
+        processName = file;
+        file = "";
+        processParam = "";
+    }
+
+    QProcess::startDetached(processName, QStringList() << processParam << file);
+
+    m_last_run_on = QDateTime::currentDateTime();
+    m_run_count++;
+
+    emit lastRunOnChanged();
+    emit runCountChanged();
+}
+
 bool ShellCommand::startProcess(int executorType)
 {
     if(m_process == NULL)
@@ -176,52 +204,12 @@ bool ShellCommand::startProcess(int executorType)
         m_process = new QProcess(this);
     }
 
-    QString dir = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+    QString file = this->createRunnerScript();
 
-    if(!QDir(dir).exists())
-    {
-        qDebug() << "Creating .local/share storage location...";
-        QDir().mkpath(dir);
-    }
-
-    QString file("");
-
-    QString tempName = m_name;
-    file = dir.append(tempName.replace(QRegExp(QString::fromUtf8("[-`~!@#$%^&*()_ —+=|:;<>«»,.?/{}\'\"\\\[\\\]\\\\]")), QString("_"))
-                      .prepend("/").append(".sh"));
-
-    switch(m_type)
-    {
-    case SingleLiner:
-        break;
-    case Script:
-        break;
-    default:
-        break;
-    }
-
-    qDebug() << file;
-
-    QFile tempScript(file);
-
-    if(!tempScript.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text))
+    if(file == "")
     {
         return false;
     }
-    if(!tempScript.setPermissions(QFile::ReadOwner|QFile::WriteOwner|QFile::ExeOwner))
-    {
-
-      qDebug("File permission for temp script could not be set.");
-
-    }
-
-    QTextStream out(&tempScript);
-
-    out << "#!/bin/bash\n";
-    out << m_content;
-
-
-    tempScript.close();
 
     QString processName = "fingerterm";
     QString processParam = "-e";
@@ -300,6 +288,63 @@ void ShellCommand::readStandardError()
     {
         m_output->append(outputs.at(i));
     }
+}
+
+QString ShellCommand::createRunnerScript()
+{
+    QString dir = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+
+    if(!QDir(dir).exists())
+    {
+        qDebug() << "Creating .local/share storage location...";
+        QDir().mkpath(dir);
+    }
+
+    QString file("");
+
+    QString tempName = m_name;
+    file = dir.append(tempName.replace(QRegExp(QString::fromUtf8("[-`~!@#$%^&*()_ —+=|:;<>«»,.?/{}\'\"\\\[\\\]\\\\]")), QString("_"))
+                      .prepend("/").append(".sh"));
+
+    switch(m_type)
+    {
+    case SingleLiner:
+        break;
+    case Script:
+        break;
+    default:
+        break;
+    }
+
+    qDebug() << file;
+
+    QFile tempScript(file);
+
+    if(!tempScript.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text))
+    {
+        qDebug("File for temp script could not be opened.");
+        file = "";;
+    }
+    if(!tempScript.setPermissions(QFile::ReadOwner|QFile::WriteOwner|QFile::ExeOwner))
+    {
+
+        qDebug("File permission for temp script could not be set.");
+        file = "";
+
+    }
+    else
+    {
+
+        QTextStream out(&tempScript);
+
+        out << "#!/bin/bash\n";
+        out << m_content;
+
+
+        tempScript.close();
+    }
+
+    return file;
 }
 
 
@@ -381,6 +426,9 @@ bool ShellCommand::moreUsedThan(const ShellCommand *subject, const ShellCommand 
 
 bool ShellCommand::moreRecentThan(const ShellCommand *subject, const ShellCommand *test)
 {
+    qDebug() << "command " << subject->name() << ", " << subject->lastRunOn().toTime_t() <<  ", is more recent than "
+             << test->name() << ", " << test->lastRunOn().toTime_t()
+             <<  ", is " << (subject->lastRunOn() > test->lastRunOn());
     //subject has been run more recently (later) than test
     return subject->lastRunOn() > test->lastRunOn();
 }

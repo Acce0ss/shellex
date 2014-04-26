@@ -1,4 +1,4 @@
-v.0.1:
+v.0.1: (current)
 
 -Sorting:
     - by name X
@@ -12,25 +12,28 @@ v.0.1:
     -update single command X
 
 -viewing commands
-    -proper icons for running process
+    -proper icons for running process X
     -type indicator
     -polish date format
 
 -running a process
     -create proper temporary script files X
-    -output page for background processes X
+    -output page for processes ran inside ShellEx X
     -exit codes X
-    -kill apps executed
-    -outputpage limit for lines
-    -individual lines in a listview
-    -copy line, copy all
+    -kill apps executed x
+    -outputpage limit for lines x
+    -individual lines in a listview x
+    -copy line, copy all X
+    -add possibility to run detached X
 
 -single liners:
     -edit as new X
     -edit X
 
 -cover
-    -run new command
+    -run new command X
+
+roadmap:
 
 v. 0.2:
 -script functionality
@@ -39,8 +42,11 @@ v. 0.2:
     -edit as new -function
     -parameter setup
 
+-script parameters
+    -when starting, open a parameter page
+    -let user input own parameters or use defaults
+
 -running a process
-    -add possibility to run detached
     -bind runner type to each command
 
 v. 0.x

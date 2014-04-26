@@ -47,8 +47,9 @@ ListItem {
                     anchors.verticalCenter: parent.verticalCenter
 
                     id: desc
-                    text: modelData.name
+                    text: model.display.name
                     color: root.highlighted ? Theme.highlightColor : Theme.primaryColor
+                    truncationMode: TruncationMode.Fade
                 }
 
             }
@@ -72,14 +73,14 @@ ListItem {
                 BusyIndicator {
                     id: runIndicator
                     anchors.centerIn: parent
-                    running: Qt.application.active && modelData.isRunning
+                    running: Qt.application.active && model.display.isRunning
                     size: BusyIndicatorSize.Small
                     z: 1
                 }
             }
             Label {
                 width: parent.width*0.2
-                text: qsTr("used\n%1 times").arg(modelData.runCount)
+                text: qsTr("used\n%1 times").arg(model.display.runCount)
                 font.pixelSize: Theme.fontSizeTiny
                 color: root.highlighted ? Theme.highlightColor : Theme.secondaryColor
             }
@@ -88,14 +89,14 @@ ListItem {
         Label {
             id: dateCreatedLabel
 
-            text: qsTr("Created on %1").arg(modelData.createdOn.toLocaleString(undefined, Locale.ShortFormat))
+            text: qsTr("Created on %1").arg(model.display.createdOn.toLocaleString(undefined, Locale.ShortFormat))
             font.pixelSize: Theme.fontSizeTiny
             color: root.highlighted ? Theme.highlightColor : Theme.secondaryColor
         }
 
         Label {
 
-            text: qsTr("Last run on %1").arg(modelData.lastRunOn.toLocaleString(undefined, Locale.ShortFormat))
+            text: qsTr("Last run on %1").arg(model.display.lastRunOn.toLocaleString(undefined, Locale.ShortFormat))
             font.pixelSize: Theme.fontSizeTiny
             color: root.highlighted ? Theme.highlightColor : Theme.secondaryColor
         }
@@ -103,39 +104,51 @@ ListItem {
     }
 
     onClicked: {
-        if(modelData.isRunning === false)
+        if(model.display.isRunning === false)
         {
-            modelData.startProcess(root.processUsed);
+            model.display.startProcess(root.processUsed);
+        }
 
-            storage.updateCommandLastRunAndCount(modelData.getAsJSONObject());
+        pageStack.push(Qt.resolvedUrl("ProcessOutputPage.qml"), {command: model.display, storageReference: storage});
+        pageStack.currentPage.statusChanged.connect(pageStack.currentPage.updateCommandHider);
 
-            if(root.processUsed === ShellExecutor.Script)
-            {
-                pageStack.push(Qt.resolvedUrl("ProcessOutputPage.qml"), {command: modelData});
-            }
-        }
-        else
-        {
-            pageStack.push(Qt.resolvedUrl("ProcessOutputPage.qml"), {command: modelData});
-        }
-        if(executor.sortType === ShellExecutor.ByNewestRun ||
-                executor.sortType === ShellExecutor.ByOldestRun ||
-                executor.sortType === ShellExecutor.ByLeastRuns ||
-                executor.sortType === ShellExecutor.ByMostRuns ||
-                executor.sortType === ShellExecutor.ByIsRunning)
-        {
-            executor.reSortCommands();
-        }
     }
+
+    onPressedChanged: {
+        if(pressed === true)
+        {
+            Qt.inputMethod.hide();
+            quickCommand.focus = false;
+        }
+
+    }
+
     menu: ContextMenu {
         enabled: true
 
         MenuItem {
+            text: qsTr("Run detached")
+            onClicked: {
+                model.display.startDetached(root.processUsed);
+            }
+            Label {
+                visible: parent.enabled
+                anchors.bottom: parent.bottom
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: qsTr("State and output will be unavailable")
+                font.pixelSize: Theme.fontSizeTiny
+                color: Theme.secondaryColor
+            }
+
+        }
+
+
+        MenuItem {
             text: qsTr("Edit")
             onClicked: {
-                if(modelData.type === ShellCommand.SingleLiner)
+                if(model.display.type === ShellCommand.SingleLiner)
                 {
-                    pageStack.push(Qt.resolvedUrl("EditCommandPage.qml"), {command: modelData,
+                    pageStack.push(Qt.resolvedUrl("EditCommandPage.qml"), {command: model.display,
                                                                            modeller: root.executor,
                                                                            editAsNew: false,
                                                                            runner: runnerChooser.currentItem.value});
@@ -145,9 +158,9 @@ ListItem {
         MenuItem {
             text: qsTr("Edit as New")
             onClicked: {
-                if(modelData.type === ShellCommand.SingleLiner)
+                if(model.display.type === ShellCommand.SingleLiner)
                 {
-                    pageStack.push(Qt.resolvedUrl("EditCommandPage.qml"), {command: modelData,
+                    pageStack.push(Qt.resolvedUrl("EditCommandPage.qml"), {command: model.display,
                                                                            modeller: root.executor,
                                                                            editAsNew: true,
                                                                            runner: runnerChooser.currentItem.value});
@@ -155,11 +168,11 @@ ListItem {
             }
         }
         MenuItem {
-            text: modelData.isRunning ? qsTr("Stop") : qsTr("Remove")
+            text: model.display.isRunning ? qsTr("Stop") : qsTr("Remove")
             onClicked: {
-                if(modelData.isRunning)
+                if(model.display.isRunning)
                 {
-                    modelData.stopProcess();
+                    model.display.stopProcess();
                 }
                 else
                 {
@@ -173,7 +186,7 @@ ListItem {
 
     function remove() {
         remorseAction(qsTr("Deleting"), function() {
-            commandsStore.removeCommand(modelData.getAsJSONObject())}
+            commandsStore.removeCommand(model.display.getAsJSONObject())}
         );
     }
 }

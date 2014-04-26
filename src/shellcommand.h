@@ -84,6 +84,7 @@ public:
     void initProcess();
 
     Q_INVOKABLE QJsonObject getAsJSONObject();
+    Q_INVOKABLE void startDetached(int executorType);
 
 signals:
 
@@ -110,6 +111,8 @@ private slots:
     void readStandardError();
 
 private:
+
+    QString createRunnerScript();
 
     QString m_name;
     CommandType m_type;

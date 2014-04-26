@@ -11,6 +11,7 @@
 #include "shellexecutor.h"
 #include "shellcommand.h"
 #include "commandoutputmodel.h"
+#include "commandsmodel.h"
 
 int main(int argc, char *argv[])
 {
@@ -20,6 +21,7 @@ int main(int argc, char *argv[])
     app->setApplicationName("harbour-shellex");
 
     qmlRegisterType<CommandOutputModel>("harbour.shellex", 1, 0, "CommandOutputModel");
+    qmlRegisterType<CommandsModel>("harbour.shellex", 1, 0, "CommandsModel");
     qmlRegisterType<ShellExecutor>("harbour.shellex", 1, 0, "ShellExecutor");
     qmlRegisterType<ShellCommand>("harbour.shellex", 1, 0, "ShellCommand");
 

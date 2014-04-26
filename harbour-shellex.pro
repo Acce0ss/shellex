@@ -13,7 +13,8 @@ CONFIG += sailfishapp
 SOURCES += src/harbour-shellex.cpp \
     src/shellexecutor.cpp \
     src/shellcommand.cpp \
-    src/commandoutputmodel.cpp
+    src/commandoutputmodel.cpp \
+    src/commandsmodel.cpp
 
 OTHER_FILES += qml/harbour-shellex.qml \
     qml/cover/CoverPage.qml \
@@ -35,5 +36,6 @@ OTHER_FILES += qml/harbour-shellex.qml \
 HEADERS += \
     src/shellexecutor.h \
     src/shellcommand.h \
-    src/commandoutputmodel.h
+    src/commandoutputmodel.h \
+    src/commandsmodel.h
 

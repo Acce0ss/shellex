@@ -55,31 +55,31 @@ Page {
                              qsTr("Least used"),
                              qsTr("Running first")]
         ListElement {
-            type: ShellExecutor.ByNewestCreated
+            type: CommandsModel.ByNewestCreated
         }
         ListElement {
-            type: ShellExecutor.ByOldestCreated
+            type: CommandsModel.ByOldestCreated
         }
         ListElement {
-            type: ShellExecutor.ByNewestRun
+            type: CommandsModel.ByNewestRun
         }
         ListElement {
-            type: ShellExecutor.ByOldestRun
+            type: CommandsModel.ByOldestRun
         }
         ListElement {
-            type: ShellExecutor.ByName
+            type: CommandsModel.ByName
         }
         ListElement {
-            type: ShellExecutor.ByNameReverse
+            type: CommandsModel.ByNameReverse
         }
         ListElement {
-            type: ShellExecutor.ByMostRuns
+            type: CommandsModel.ByMostRuns
         }
         ListElement {
-            type: ShellExecutor.ByLeastRuns
+            type: CommandsModel.ByLeastRuns
         }
         ListElement {
-            type: ShellExecutor.ByIsRunning
+            type: CommandsModel.ByIsRunning
         }
     }
 

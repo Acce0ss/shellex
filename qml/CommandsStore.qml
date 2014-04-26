@@ -60,6 +60,8 @@ Item {
                                jsonObj.content,jsonObj.runCount, jsonObj.id]
                               );
             } );
+
+            shell.updateCommandById(jsonObj.id);
         }
         else
         {
@@ -82,6 +84,8 @@ Item {
 
 
             } );
+
+            shell.updateCommandById(jsonObj.id);
         }
         else
         {
