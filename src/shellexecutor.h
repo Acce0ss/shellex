@@ -24,6 +24,8 @@ class ShellExecutor : public QObject
 public:
     explicit ShellExecutor(QObject *parent = 0);
 
+    ~ShellExecutor();
+
     enum Executor {Fingerterm, Script};
 
     Q_INVOKABLE void quickExecute(QJsonObject commandObject, Executor runner);

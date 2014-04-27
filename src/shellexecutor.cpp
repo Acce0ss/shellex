@@ -35,6 +35,12 @@ ShellExecutor::ShellExecutor(QObject *parent) :
     emit fingertermInstalledChanged();
 }
 
+ShellExecutor::~ShellExecutor()
+{
+    this->stopAllCommands();
+
+}
+
 
 void ShellExecutor::quickExecute(QJsonObject commandObject, Executor runner)
 {

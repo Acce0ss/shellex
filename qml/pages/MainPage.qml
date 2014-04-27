@@ -71,7 +71,7 @@ Page {
                 menu: ContextMenu {
 
                     MenuItem{
-                        text: qsTr("as app child process")
+                        text: qsTr("inside the app")
                         property int value: ShellExecutor.Script
                     }
 
