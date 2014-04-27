@@ -31,7 +31,8 @@ OTHER_FILES += qml/harbour-shellex.qml \
     qml/images/running.png \
     qml/pages/CreateScriptPage.qml \
     qml/pages/EditScriptPage.qml \
-    qml/Routine.qml
+    qml/Routine.qml \
+    qml/pages/InfoPage.qml
 
 HEADERS += \
     src/shellexecutor.h \

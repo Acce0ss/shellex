@@ -30,7 +30,7 @@ ShellExecutor::ShellExecutor(QObject *parent) :
         output.append(QString(findFingerterm.readAll()));
     }
 
-    qDebug() << output;
+    //qDebug() << output;
     m_fingerterm_installed = !(output.contains("which: no"));
     emit fingertermInstalledChanged();
 }

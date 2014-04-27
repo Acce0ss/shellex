@@ -84,7 +84,7 @@ void CommandsModel::reInsertCommand(ShellCommand *toUpdate)
 
     int hypotheticPosition = (i - temp.begin());
 
-    qDebug() << index << " != " << hypotheticPosition << " = " << (index != hypotheticPosition);
+   // qDebug() << index << " != " << hypotheticPosition << " = " << (index != hypotheticPosition);
 
     if(index != (hypotheticPosition - 1))
     {
@@ -193,16 +193,16 @@ void CommandsModel::applySearchStringFiltering()
         }
     }
 
-    qDebug() << "At start, size of m_commands is " << m_commands.count() << ", of to_readd is " << to_readd.count()
-             << " and of m_not_searchresult is " << m_not_searchresult.count();
+    //qDebug() << "At start, size of m_commands is " << m_commands.count() << ", of to_readd is " << to_readd.count()
+//             << " and of m_not_searchresult is " << m_not_searchresult.count();
 
     //find commands that do not fit into the search anymore
     for(int i = 0; i < m_commands.count(); i++)
     {
-        qDebug() << "Checking command at index " << i << ", " << m_commands.at(i)->name();
+        //qDebug() << "Checking command at index " << i << ", " << m_commands.at(i)->name();
         if(!m_commands.at(i)->name().toLower().contains(m_searchString.toLower()))
         {
-            qDebug() << m_searchString << " is not in " << m_commands.at(i)->name();
+            //qDebug() << m_searchString << " is not in " << m_commands.at(i)->name();
             m_not_searchresult.push_back(m_commands.at(i));
         }
 
@@ -223,16 +223,16 @@ void CommandsModel::applySearchStringFiltering()
 
         if(index >= 0 && index < m_commands.count())
         {
-            qDebug() << "removing " << m_not_searchresult.at(i)->name() << " at " << index
-                     << ", which in m_commands is " << m_commands.at(index)->name();
+            //qDebug() << "removing " << m_not_searchresult.at(i)->name() << " at " << index
+            //         << ", which in m_commands is " << m_commands.at(index)->name();
             beginRemoveRows(QModelIndex(), index, index);
             m_commands.removeAt(index);
             endRemoveRows();
         }
     }
 
-    qDebug() << "in the end, size of m_commands is " << m_commands.count() << ", of to_readd is " << to_readd.count()
-             << " and of m_not_searchresult is " << m_not_searchresult.count();
+    //qDebug() << "in the end, size of m_commands is " << m_commands.count() << ", of to_readd is " << to_readd.count()
+    //         << " and of m_not_searchresult is " << m_not_searchresult.count();
 
 }
 

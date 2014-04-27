@@ -26,6 +26,12 @@ Page {
 
         PullDownMenu {
             MenuItem {
+                text: qsTr("About")
+                onClicked: {
+                    pageStack.push(Qt.resolvedUrl("InfoPage.qml"))
+                }
+            }
+            MenuItem {
                 text: qsTr("Close all running commands")
                 onClicked: {
                     shell.stopAllCommands();

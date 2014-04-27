@@ -296,7 +296,7 @@ QString ShellCommand::createRunnerScript()
 
     if(!QDir(dir).exists())
     {
-        qDebug() << "Creating .local/share storage location...";
+        //qDebug() << "Creating .local/share storage location...";
         QDir().mkpath(dir);
     }
 
@@ -316,7 +316,7 @@ QString ShellCommand::createRunnerScript()
         break;
     }
 
-    qDebug() << file;
+    //qDebug() << file;
 
     QFile tempScript(file);
 
@@ -394,10 +394,10 @@ ShellCommand *ShellCommand::fromJSONObject(QJsonObject JSONObject)
         toBeCreated->setType(Script);
     }
 
-    qDebug() << "Creating command: name: " << toBeCreated->name()
-             << " type: " << toBeCreated->type() << " createdOn: " << toBeCreated->createdOn()
-             << " lastRunOn: " << toBeCreated->lastRunOn() << " content: " << toBeCreated->content()
-             << " isInDatabase: " << toBeCreated->isInDatabase() << " id: " << toBeCreated->id();
+    //qDebug() << "Creating command: name: " << toBeCreated->name()
+    //         << " type: " << toBeCreated->type() << " createdOn: " << toBeCreated->createdOn()
+    //         << " lastRunOn: " << toBeCreated->lastRunOn() << " content: " << toBeCreated->content()
+    //         << " isInDatabase: " << toBeCreated->isInDatabase() << " id: " << toBeCreated->id();
 
     return toBeCreated;
 }
@@ -426,9 +426,9 @@ bool ShellCommand::moreUsedThan(const ShellCommand *subject, const ShellCommand 
 
 bool ShellCommand::moreRecentThan(const ShellCommand *subject, const ShellCommand *test)
 {
-    qDebug() << "command " << subject->name() << ", " << subject->lastRunOn().toTime_t() <<  ", is more recent than "
-             << test->name() << ", " << test->lastRunOn().toTime_t()
-             <<  ", is " << (subject->lastRunOn() > test->lastRunOn());
+    //qDebug() << "command " << subject->name() << ", " << subject->lastRunOn().toTime_t() <<  ", is more recent than "
+    //         << test->name() << ", " << test->lastRunOn().toTime_t()
+    //         <<  ", is " << (subject->lastRunOn() > test->lastRunOn());
     //subject has been run more recently (later) than test
     return subject->lastRunOn() > test->lastRunOn();
 }
