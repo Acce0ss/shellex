@@ -33,9 +33,14 @@ v.0.1: (current)
 -cover
     -run new command X
 
+v. 0.2:
+
+
+
 roadmap:
 
-v. 0.2:
+v. 0.x
+
 -script functionality
     -new script -page
     -edit script -page
@@ -49,7 +54,5 @@ v. 0.2:
 -running a process
     -bind runner type to each command
 
-v. 0.x
-
-integration
+-integration
     -integrate app functionality into events view as an UI patch
