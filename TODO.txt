@@ -35,24 +35,34 @@ v.0.1: (current)
 
 v. 0.2:
 
+-database
+    -create schema updating functions for db version upgrade
+    -add settings table with settings(name, type, value, description)
 
+-settings page
 
-roadmap:
-
-v. 0.x
+-running a process
+    -bind runner type to each command -> Started implementing, needs testing.
+    -add possibility to adjust process output lines count
 
 -script functionality
     -new script -page
     -edit script -page
     -edit as new -function
     -parameter setup
+    -edit with $EDITOR in Fingerterm
 
 -script parameters
     -when starting, open a parameter page
     -let user input own parameters or use defaults
 
--running a process
-    -bind runner type to each command
+
+roadmap:
+
+v. 0.x
 
 -integration
     -integrate app functionality into events view as an UI patch
+
+-cover
+    -bind command / script to cover, start/stop from cover and show output

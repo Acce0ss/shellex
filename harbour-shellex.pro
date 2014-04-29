@@ -32,7 +32,8 @@ OTHER_FILES += qml/harbour-shellex.qml \
     qml/pages/CreateScriptPage.qml \
     qml/pages/EditScriptPage.qml \
     qml/Routine.qml \
-    qml/pages/InfoPage.qml
+    qml/pages/InfoPage.qml \
+    qml/pages/ProcessOutputSettingsPage.qml
 
 HEADERS += \
     src/shellexecutor.h \

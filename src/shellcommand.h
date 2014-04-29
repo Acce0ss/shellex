@@ -15,7 +15,10 @@ class ShellCommand : public QObject
     Q_OBJECT
 
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+
     Q_PROPERTY(CommandType type READ type WRITE setType NOTIFY typeChanged)
+    Q_PROPERTY(Executor runIn READ runIn WRITE setRunIn NOTIFY runInChanged)
+
     Q_PROPERTY(QString content READ content WRITE setContent NOTIFY contentChanged)
     Q_PROPERTY(QDateTime createdOn READ createdOn NOTIFY createdOnChanged)
     Q_PROPERTY(QDateTime lastRunOn READ lastRunOn NOTIFY lastRunOnChanged)
@@ -27,9 +30,11 @@ class ShellCommand : public QObject
     Q_PROPERTY(bool isStarting READ isStarting NOTIFY isStartingChanged)
 
     Q_ENUMS(CommandType)
+    Q_ENUMS(Executor)
 
 public:
     enum CommandType {Script, SingleLiner};
+    enum Executor {Fingerterm, InsideApp};
 
     explicit ShellCommand(QObject *parent = 0);
     explicit ShellCommand(QObject *parent, QString name, CommandType type, QString content);
@@ -63,6 +68,9 @@ public:
     CommandType type() const;
     void setType(CommandType type);
 
+    Executor runIn() const;
+    void setRunIn(Executor type);
+
     QString content() const;
     void setContent(QString content);
 
@@ -75,6 +83,7 @@ public:
     unsigned int runCount() const;
     void setRunCount(unsigned int count);
 
+
     CommandOutputModel* output();
 
     bool isRunning() const;
@@ -84,7 +93,7 @@ public:
     void initProcess();
 
     Q_INVOKABLE QJsonObject getAsJSONObject();
-    Q_INVOKABLE void startDetached(int executorType);
+    Q_INVOKABLE void startDetached();
 
 signals:
 
@@ -94,13 +103,14 @@ signals:
 
     void isRunningChanged();
     void isStartingChanged();
+    void runInChanged();
 
     void lastRunOnChanged();
     void createdOnChanged();
     void runCountChanged();
 public slots:
 
-    bool startProcess(int executorType);
+    bool startProcess();
 
     void stopProcess();
 
@@ -113,6 +123,8 @@ private slots:
 private:
 
     QString createRunnerScript();
+
+    static bool SubjectAndTestValid(const ShellCommand *subject, const ShellCommand *test);
 
     QString m_name;
     CommandType m_type;
@@ -132,6 +144,8 @@ private:
     unsigned int m_run_count;
 
     CommandOutputModel* m_output;
+
+    Executor m_run_in;
 
 };
 

@@ -72,19 +72,19 @@ Page {
             ComboBox {
                 id: runnerChooser
 
-                label: qsTr("Run ")
+                label: qsTr("Run quick command")
 
                 menu: ContextMenu {
 
                     MenuItem{
                         text: qsTr("inside the app")
-                        property int value: ShellExecutor.Script
+                        property int value: ShellCommand.InsideApp
                     }
 
                     MenuItem{
                         enabled: shell.fingertermInstalled
                         text: qsTr("in Fingerterm")
-                        property int value: ShellExecutor.Fingerterm
+                        property int value: ShellCommand.Fingerterm
                         Label {
                             visible: !parent.enabled
                             anchors.bottom: parent.bottom
@@ -147,8 +147,6 @@ Page {
                 delegate: CommandDelegate {
 
                     id: shortcutItem
-
-                    processUsed: runnerChooser.currentItem.value
 
                     executor: shell
                     storage: commandsStore

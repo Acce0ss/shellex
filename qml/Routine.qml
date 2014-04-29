@@ -10,32 +10,51 @@ QtObject {
 
         var newObj = {name: name, content: content,
             createdOn: new Date().getTime()/1000, lastRunOn: new Date().getTime()/1000,
-            type: type};
+            type: type, runIn: runnerType};
 
-        var created = commandsStore.addCommand(newObj);
+        var existing = sheller.getCommandNamed(newObj.name);
 
-        if(created !== null)
+        if(existing === null)
         {
-            created.startProcess(runnerType);
 
-            if(runnerType === ShellExecutor.Script)
+            var created = commandsStore.addCommand(newObj);
+
+            if(created !== null)
             {
-                if(pageStack.currentPage.objectName == 'EditCommandPage')
-                {
-                    pageStack.replace(Qt.resolvedUrl("pages/ProcessOutputPage.qml"),
-                                      {command: sheller.getCommandNamed(newObj.name)},
-                                      PageStackAction.Animated);
-                }
-                else
-                {
-                    pageStack.push(Qt.resolvedUrl("pages/ProcessOutputPage.qml"),
-                                   {command: sheller.getCommandNamed(newObj.name)});
-                }
+                created.startProcess();
+
+                openOutputPage(created);
+
+            }
+            else
+            {
+                console.log("Error in database insertion.");
             }
         }
         else
         {
-            console.log("errorz")
+            console.log("Command already in db. running it..")
+            existing.startProcess();
+
+            openOutputPage(existing);
+        }
+    }
+
+    function openOutputPage(command)
+    {
+        if(command.runIn === ShellCommand.InsideApp)
+        {
+            if(pageStack.currentPage.objectName == 'EditCommandPage')
+            {
+                pageStack.replace(Qt.resolvedUrl("pages/ProcessOutputPage.qml"),
+                                  {command: command},
+                                  PageStackAction.Animated);
+            }
+            else
+            {
+                pageStack.push(Qt.resolvedUrl("pages/ProcessOutputPage.qml"),
+                               {command: command});
+            }
         }
     }
 }

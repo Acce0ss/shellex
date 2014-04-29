@@ -19,13 +19,24 @@ QVariant CommandsModel::data(const QModelIndex &index, int role) const
 {
     if (index.row() < 0 || index.row() >= m_commands.count())
     {
+        qDebug() << "Tried to access data item " << index.row() << "which is out of range!";
         return QVariant();
     }
 
     if(role == Qt::DisplayRole)
     {
-        return QVariant::fromValue(dynamic_cast<QObject*>(m_commands.at(index.row())));
+        ShellCommand* temp = m_commands.at(index.row());
+
+        if(temp != NULL)
+        {
+          //  qDebug() << "ShellCommand at " << index.row() << "is " << temp;
+            return QVariant::fromValue(temp);
+        }
+
+
     }
+
+    qDebug() << "Errors occurred with ShellCommand at " << index.row();
     return QVariant();
 }
 
@@ -159,20 +170,17 @@ void CommandsModel::sortCommands(CommandsModel::SortType type, bool isResort)
             endRemoveRows();
         }
 
-        m_commands.clear();
-
         //insert them back to the model in the new sorting order
         for(int i = 0; i < temp.count(); ++i)
         {
            this->insert(temp.at(i));
         }
 
-        emit commandsModelChanged();
-
     }
 
 }
 
+//Don't use anymore, use reloadCommandsModel instead
 void CommandsModel::reSortCommands()
 {
     this->sortCommands(m_sort_type, true);

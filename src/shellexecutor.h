@@ -18,20 +18,10 @@ class ShellExecutor : public QObject
     Q_PROPERTY(CommandsModel* commandsModel READ commandsModel NOTIFY commandsModelChanged)
     Q_PROPERTY(bool fingertermInstalled READ fingertermInstalled NOTIFY fingertermInstalledChanged)
 
-    Q_ENUMS(Executor)
-
-
 public:
     explicit ShellExecutor(QObject *parent = 0);
 
     ~ShellExecutor();
-
-    enum Executor {Fingerterm, Script};
-
-    Q_INVOKABLE void quickExecute(QJsonObject commandObject, Executor runner);
-    Q_INVOKABLE void executeByIndex(int index, Executor runner);
-    Q_INVOKABLE void executeDetached(QString commands, Executor runner);
-    Q_INVOKABLE void executeDetachedByIndex(int index, Executor runner);
 
     Q_INVOKABLE void stopAllCommands();
 

@@ -10,7 +10,6 @@ ListItem {
 
     id: root
 
-    property int processUsed
     property CommandsStore storage
     property ShellExecutor executor
 
@@ -106,7 +105,7 @@ ListItem {
     onClicked: {
         if(model.display.isRunning === false)
         {
-            model.display.startProcess(root.processUsed);
+            model.display.startProcess();
         }
 
         pageStack.push(Qt.resolvedUrl("ProcessOutputPage.qml"), {command: model.display, storageReference: storage});
@@ -129,7 +128,7 @@ ListItem {
         MenuItem {
             text: qsTr("Run detached")
             onClicked: {
-                model.display.startDetached(root.processUsed);
+                model.display.startDetached();
             }
             Label {
                 visible: parent.enabled
@@ -150,8 +149,7 @@ ListItem {
                 {
                     pageStack.push(Qt.resolvedUrl("EditCommandPage.qml"), {command: model.display,
                                                                            modeller: root.executor,
-                                                                           editAsNew: false,
-                                                                           runner: runnerChooser.currentItem.value});
+                                                                           editAsNew: false});
                 }
             }
         }
@@ -162,8 +160,7 @@ ListItem {
                 {
                     pageStack.push(Qt.resolvedUrl("EditCommandPage.qml"), {command: model.display,
                                                                            modeller: root.executor,
-                                                                           editAsNew: true,
-                                                                           runner: runnerChooser.currentItem.value});
+                                                                           editAsNew: true});
                 }
             }
         }

@@ -42,40 +42,6 @@ ShellExecutor::~ShellExecutor()
 }
 
 
-void ShellExecutor::quickExecute(QJsonObject commandObject, Executor runner)
-{
-
-    ShellCommand* comm = m_commands->findCommandByName(commandObject["name"].toString());
-
-    if( comm == NULL)
-    {
-        comm = new ShellCommand(this, commandObject["name"].toString(),
-                (ShellCommand::CommandType)(int)commandObject["type"].toDouble(),
-                commandObject["content"].toString());
-        m_commands->insert(comm);
-    }
-    comm->startProcess(runner);
-
-}
-
-void ShellExecutor::executeByIndex(int index, ShellExecutor::Executor runner)
-{
-    if(index >= 0 && index < m_commands->rowCount())
-    {
-        m_commands->at(index)->startProcess(runner);
-    }
-}
-
-void ShellExecutor::executeDetached(QString commands, ShellExecutor::Executor runner)
-{
-
-}
-
-void ShellExecutor::executeDetachedByIndex(int index, ShellExecutor::Executor runner)
-{
-
-}
-
 void ShellExecutor::stopAllCommands()
 {
     for(int i = 0; i < m_commands->rowCount(); i++)

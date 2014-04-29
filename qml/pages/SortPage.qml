@@ -50,7 +50,7 @@ Page {
                              qsTr("Most recently used"),
                              qsTr("Least recently used"),
                              qsTr("Alphabetically"),
-                             qsTr("Aplhabetically reversed"),
+                             qsTr("Alphabetically reversed"),
                              qsTr("Most used"),
                              qsTr("Least used"),
                              qsTr("Running first")]

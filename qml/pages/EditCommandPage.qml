@@ -11,8 +11,6 @@ Dialog {
 
     property bool editAsNew: false
 
-    property int runner: 0
-
     allowedOrientations: Orientation.All
 
     SilicaFlickable {
@@ -36,6 +34,48 @@ Dialog {
                 width: parent.width
             }
 
+            ComboBox {
+                id: runnerChooser
+
+                label: qsTr("Run this command")
+
+
+                Component.onCompleted: {
+                    var currentRunner = root.command.runIn;
+                    if(currentRunner === ShellCommand.Fingerterm)
+                    {
+                        currentIndex = 1;
+                    }
+                    else if(currentRunner === ShellCommand.InsideApp)
+                    {
+                        currentIndex = 0;
+                    }
+                }
+
+                menu: ContextMenu {
+
+                    MenuItem{
+                        text: qsTr("inside the app")
+                        property int value: ShellCommand.InsideApp
+                    }
+
+                    MenuItem{
+                        enabled: modeller.fingertermInstalled
+                        text: qsTr("in Fingerterm")
+                        property int value: ShellCommand.Fingerterm
+                        Label {
+                            visible: !parent.enabled
+                            anchors.bottom: parent.bottom
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            text: qsTr("Fingerterm is not installed")
+                            font.pixelSize: Theme.fontSizeTiny
+                            color: Theme.secondaryColor
+                        }
+                    }
+
+                }
+            }
+
         }
 
     }
@@ -44,13 +84,14 @@ Dialog {
         if(editAsNew === true)
         {
             routineLib.createStoredCommand(editField.text, editField.text,
-                                           "SingleLiner", root.runner);
+                                           "SingleLiner", runnerChooser.currentItem.value);
 
         }
         else
         {
             root.command.content = editField.text;
             root.command.name = editField.text;
+            root.command.runIn = runnerChooser.currentItem.value;
             commandsStore.updateCommand(root.command.getAsJSONObject());
 
         }

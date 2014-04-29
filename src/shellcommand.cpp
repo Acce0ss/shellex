@@ -13,18 +13,26 @@
 #include "commandoutputmodel.h"
 
 ShellCommand::ShellCommand(QObject *parent) :
-    QObject(parent), m_name(""), m_type(SingleLiner), m_content(""), m_process(NULL),
+    QObject(parent), m_name(""), m_type(SingleLiner), m_content(""), m_process(new QProcess(this)),
     m_is_running(false), m_created_on(QDateTime::currentDateTime()), m_last_run_on(),
-    m_is_in_database(false), m_id(UINT_MAX), m_run_count(0), m_output(new CommandOutputModel(this))
+    m_is_in_database(false), m_id(UINT_MAX), m_run_count(0), m_output(new CommandOutputModel(this)),
+    m_run_in(InsideApp)
 {
+    connect(m_process, static_cast<void (QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, &ShellCommand::processFinished);
+    connect(m_process, &QProcess::readyReadStandardOutput, this, &ShellCommand::readStandardOutput);
+    connect(m_process, &QProcess::readyReadStandardError, this, &ShellCommand::readStandardError);
 }
 
 
 ShellCommand::ShellCommand(QObject *parent, QString name, CommandType type, QString content) :
-    QObject(parent), m_name(name), m_type(type), m_content(content), m_process(NULL),
+    QObject(parent), m_name(name), m_type(type), m_content(content), m_process(new QProcess(this)),
     m_is_running(false), m_created_on(QDateTime::currentDateTime()), m_last_run_on(),
-    m_is_in_database(false), m_id(UINT_MAX), m_run_count(0), m_output(new CommandOutputModel(this))
+    m_is_in_database(false), m_id(UINT_MAX), m_run_count(0), m_output(new CommandOutputModel(this)),
+    m_run_in(InsideApp)
 {
+    connect(m_process, static_cast<void (QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, &ShellCommand::processFinished);
+    connect(m_process, &QProcess::readyReadStandardOutput, this, &ShellCommand::readStandardOutput);
+    connect(m_process, &QProcess::readyReadStandardError, this, &ShellCommand::readStandardError);
 }
 
 QString ShellCommand::name() const
@@ -105,6 +113,20 @@ void ShellCommand::setRunCount(unsigned int count)
     }
 }
 
+ShellCommand::Executor ShellCommand::runIn() const
+{
+    return m_run_in;
+}
+
+void ShellCommand::setRunIn(ShellCommand::Executor type)
+{
+    if(m_run_in != type)
+    {
+        m_run_in = type;
+        emit runInChanged();
+    }
+}
+
 CommandOutputModel *ShellCommand::output()
 {
     return m_output;
@@ -116,6 +138,8 @@ bool ShellCommand::isRunning() const
     {
         return ((m_process->state() == QProcess::Starting)||(m_process->state() == QProcess::Running));
     }
+
+    qDebug() << "Error in isRunning: ShellCommand " << m_name << " tried to operate on null m_process";
     return false;
 }
 
@@ -125,6 +149,7 @@ bool ShellCommand::isStarting() const
     {
         return ((m_process->state() == QProcess::Starting));
     }
+    qDebug() << "Error in isStarting: ShellCommand " << m_name << " tried to operate on null m_process";
     return false;
 }
 
@@ -160,7 +185,7 @@ QJsonObject ShellCommand::getAsJSONObject()
     return tempObj;
 }
 
-void ShellCommand::startDetached(int executorType)
+void ShellCommand::startDetached()
 {
     QString file = this->createRunnerScript();
 
@@ -172,7 +197,7 @@ void ShellCommand::startDetached(int executorType)
     QString processName = "fingerterm";
     QString processParam = "-e";
 
-    if(executorType == (int)ShellExecutor::Script)
+    if(m_run_in == InsideApp)
     {
         processName = file;
         file = "";
@@ -188,20 +213,16 @@ void ShellCommand::startDetached(int executorType)
     emit runCountChanged();
 }
 
-bool ShellCommand::startProcess(int executorType)
+bool ShellCommand::startProcess()
 {
     if(m_process == NULL)
     {
+        qDebug() << "Fatal error, m_process was NULL";
         m_process = new QProcess(this);
     }
     else if(m_process->state() != QProcess::NotRunning)
     {
         return false;
-    }
-    else
-    {
-        m_process->deleteLater();
-        m_process = new QProcess(this);
     }
 
     QString file = this->createRunnerScript();
@@ -214,32 +235,44 @@ bool ShellCommand::startProcess(int executorType)
     QString processName = "fingerterm";
     QString processParam = "-e";
 
-    if(executorType == (int)ShellExecutor::Script)
+    if(m_run_in == InsideApp)
     {
         processName = file;
         file = "";
         processParam = "";
     }
 
-    m_output->append(trUtf8("Command %1 starting...").arg(m_name));
+    if(m_output != NULL)
+    {
+        m_output->append(trUtf8("Command %1 starting...").arg(m_name));
+    }
+    else
+    {
+        m_output = new CommandOutputModel(this);
+        m_output->append(trUtf8("Command %1 starting...").arg(m_name));
+    }
 
-    connect(m_process, static_cast<void (QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, &ShellCommand::processFinished);
-    connect(m_process, &QProcess::readyReadStandardOutput, this, &ShellCommand::readStandardOutput);
-    connect(m_process, &QProcess::readyReadStandardError, this, &ShellCommand::readStandardError);
+    if(m_process != NULL)
+    {
 
-    m_process->start(processName, QStringList() << processParam << file);
+        m_process->start(processName, QStringList() << processParam << file);
 
+        m_last_run_on = QDateTime::currentDateTime();
+        m_run_count++;
 
-    m_last_run_on = QDateTime::currentDateTime();
-    m_run_count++;
+        emit lastRunOnChanged();
+        emit runCountChanged();
 
-    emit lastRunOnChanged();
-    emit runCountChanged();
+        emit isStartingChanged();
+        emit isRunningChanged();
 
-    emit isStartingChanged();
-    emit isRunningChanged();
-
-    return true;
+        return true;
+    }
+    else
+    {
+        qDebug() << "Fatal error: m_process NULL when trying to start the command " << m_name;
+    }
+    return false;
 }
 
 void ShellCommand::stopProcess()
@@ -257,36 +290,74 @@ void ShellCommand::stopProcess()
 
         m_process->close();
     }
+    else
+    {
+        qDebug() << "Error: ShellCommand " << m_name << " tried to operate on null m_process";
+    }
 }
 
 void ShellCommand::processFinished(int code, QProcess::ExitStatus status)
 {
 
-    m_output->append(trUtf8("Program returned exit code %1").arg(QString::number(code)));
+    if(m_output != NULL)
+    {
+        m_output->append(trUtf8("Program returned exit code %1").arg(QString::number(code)));
+    }
+    else
+    {
+        qDebug() << "Error in processFinished: ShellCommand " << m_name << " tried to operate on null m_output";
+    }
 
     emit isRunningChanged();
-
-    m_process->deleteLater();
-    m_process = NULL;
 }
 
 void ShellCommand::readStandardOutput()
 {
-    QStringList outputs = QString(m_process->readAllStandardOutput())
-            .split(QRegExp("[\r\n]"),QString::SkipEmptyParts);
-    for(int i=0; i < outputs.length(); i++)
+    if(m_process != NULL)
     {
-        m_output->append(outputs.at(i));
+
+        QStringList outputs = QString(m_process->readAllStandardOutput())
+                .split(QRegExp("[\r\n]"),QString::SkipEmptyParts);
+        if(m_output != NULL)
+        {
+            for(int i=0; i < outputs.length(); i++)
+            {
+                m_output->append(outputs.at(i));
+            }
+        }
+        else
+        {
+            qDebug() << "Error in readStandardOutput: ShellCommand " << m_name << " tried to operate on null m_output";
+        }
+
+    }
+    else
+    {
+        qDebug() << "Error in readStandardOutput: ShellCommand " << m_name << " tried to operate on null m_process";
     }
 }
 
 void ShellCommand::readStandardError()
 {
-    QStringList outputs = QString(m_process->readAllStandardError())
-            .split(QRegExp("[\r\n]"),QString::SkipEmptyParts);
-    for(int i=0; i < outputs.length(); i++)
+    if(m_process != NULL)
     {
-        m_output->append(outputs.at(i));
+        QStringList outputs = QString(m_process->readAllStandardError())
+                .split(QRegExp("[\r\n]"),QString::SkipEmptyParts);
+        if(m_output != NULL)
+        {
+            for(int i=0; i < outputs.length(); i++)
+            {
+                m_output->append(outputs.at(i));
+            }
+        }
+        else
+        {
+            qDebug() << "Error in readStandardError: ShellCommand " << m_name << " tried to operate on null m_output";
+        }
+    }
+    else
+    {
+        qDebug() << "Error in readStandardError: ShellCommand " << m_name << " tried to operate on null m_process";
     }
 }
 
@@ -347,6 +418,19 @@ QString ShellCommand::createRunnerScript()
     return file;
 }
 
+bool ShellCommand::SubjectAndTestValid(const ShellCommand *subject, const ShellCommand *test)
+{
+    if(subject != NULL && test != NULL)
+    {
+        return true;
+    }
+    else
+    {
+        qDebug() << "Error when comparing for sort: tried to operate on null subject or test";
+    }
+    return false;
+}
+
 
 ShellCommand *ShellCommand::fromJSONString(QString JSON)
 {
@@ -394,6 +478,15 @@ ShellCommand *ShellCommand::fromJSONObject(QJsonObject JSONObject)
         toBeCreated->setType(Script);
     }
 
+    if(JSONObject["runIn"].toString() == "Fingerterm")
+    {
+        toBeCreated->setRunIn(Fingerterm);
+    }
+    else if(JSONObject["runIn"].toString() == "InsideApp")
+    {
+        toBeCreated->setRunIn(InsideApp);
+    }
+
     //qDebug() << "Creating command: name: " << toBeCreated->name()
     //         << " type: " << toBeCreated->type() << " createdOn: " << toBeCreated->createdOn()
     //         << " lastRunOn: " << toBeCreated->lastRunOn() << " content: " << toBeCreated->content()
@@ -404,51 +497,84 @@ ShellCommand *ShellCommand::fromJSONObject(QJsonObject JSONObject)
 
 bool ShellCommand::newerThan(const ShellCommand *subject, const ShellCommand *test)
 {
-    //subject was created later than test
-    return subject->createdOn() > test->createdOn();
+
+    if(SubjectAndTestValid(subject, test))
+    {
+        //subject was created later than test
+        return subject->createdOn() > test->createdOn();
+    }
+    return false;
 }
 
 bool ShellCommand::olderThan(const ShellCommand *subject, const ShellCommand *test)
 {
-    //subject was created earlier than test
-    return subject->createdOn() < test->createdOn();
+    if(SubjectAndTestValid(subject, test))
+    {
+        //subject was created earlier than test
+        return subject->createdOn() < test->createdOn();
+    }
+    return false;
 }
 
 bool ShellCommand::lessUsedThan(const ShellCommand *subject, const ShellCommand *test)
 {
-    return subject->runCount() < test->runCount();
+    if(SubjectAndTestValid(subject, test))
+    {
+        return subject->runCount() < test->runCount();
+    }
+    return false;
 }
 
 bool ShellCommand::moreUsedThan(const ShellCommand *subject, const ShellCommand *test)
 {
-    return subject->runCount() > test->runCount();
+    if(SubjectAndTestValid(subject, test))
+    {
+        return subject->runCount() > test->runCount();
+    }
+    return false;
 }
 
 bool ShellCommand::moreRecentThan(const ShellCommand *subject, const ShellCommand *test)
 {
-    //qDebug() << "command " << subject->name() << ", " << subject->lastRunOn().toTime_t() <<  ", is more recent than "
-    //         << test->name() << ", " << test->lastRunOn().toTime_t()
-    //         <<  ", is " << (subject->lastRunOn() > test->lastRunOn());
-    //subject has been run more recently (later) than test
-    return subject->lastRunOn() > test->lastRunOn();
+    if(SubjectAndTestValid(subject, test))
+    {
+        //qDebug() << "command " << subject->name() << ", " << subject->lastRunOn().toTime_t() <<  ", is more recent than "
+        //         << test->name() << ", " << test->lastRunOn().toTime_t()
+        //         <<  ", is " << (subject->lastRunOn() > test->lastRunOn());
+        //subject has been run more recently (later) than test
+        return subject->lastRunOn() > test->lastRunOn();
+    }
+    return false;
 }
 
 bool ShellCommand::lessRecentThan(const ShellCommand *subject, const ShellCommand *test)
 {
-    //subject has been run before (earlier) than test
-    return subject->lastRunOn() < test->lastRunOn();
+    if(SubjectAndTestValid(subject, test))
+    {
+        //subject has been run before (earlier) than test
+        return subject->lastRunOn() < test->lastRunOn();
+    }
+    return false;
 }
 
 bool ShellCommand::alphabeticallyBefore(const ShellCommand *subject, const ShellCommand *test)
 {
-    //case insensitive, is subject before test alphabetically
-    return subject->name().toLower() < test->name().toLower();
+    if(SubjectAndTestValid(subject, test))
+    {
+        //case insensitive, is subject before test alphabetically
+        return subject->name().toLower() < test->name().toLower();
+    }
+    return false;
 }
 
 bool ShellCommand::alphabeticallyAfter(const ShellCommand *subject, const ShellCommand *test)
 {
-    //case insensitive, is subject after test alphabetically
-    return subject->name().toLower() > test->name().toLower();
+    if(SubjectAndTestValid(subject, test))
+    {
+        //case insensitive, is subject after test alphabetically
+        return subject->name().toLower() > test->name().toLower();
+    }
+    return false;
 }
 
 ShellCommand::~ShellCommand()
@@ -456,11 +582,13 @@ ShellCommand::~ShellCommand()
     if(m_process != NULL)
     {
         m_process->close();
-        m_process->waitForFinished();
         m_process->deleteLater();
     }
 
-    m_output->deleteLater();
+    if(m_output != NULL)
+    {
+        m_output->deleteLater();
+    }
 
 }
 

@@ -49,7 +49,7 @@ Dialog {
             {
                 created.startProcess(runnerChooser.currentItem.value);
 
-                if(runnerChooser.currentItem.value === ShellExecutor.Script)
+                if(runnerChooser.currentItem.value === ShellCommand.InsideApp)
                 {
                     pageStack.push(Qt.resolvedUrl("ProcessOutputPage.qml"),
                                    {command: root.modeller.getCommandNamed(newObj.name)});
