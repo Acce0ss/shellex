@@ -16,7 +16,7 @@ ShellCommand::ShellCommand(QObject *parent) :
     QObject(parent), m_name(""), m_type(SingleLiner), m_content(""), m_process(new QProcess(this)),
     m_is_running(false), m_created_on(QDateTime::currentDateTime()), m_last_run_on(),
     m_is_in_database(false), m_id(UINT_MAX), m_run_count(0), m_output(new CommandOutputModel(this)),
-    m_run_in(InsideApp)
+    m_run_in(InsideApp), m_updated_on_this_start(false)
 {
     connect(m_process, static_cast<void (QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, &ShellCommand::processFinished);
     connect(m_process, &QProcess::readyReadStandardOutput, this, &ShellCommand::readStandardOutput);
@@ -28,7 +28,7 @@ ShellCommand::ShellCommand(QObject *parent, QString name, CommandType type, QStr
     QObject(parent), m_name(name), m_type(type), m_content(content), m_process(new QProcess(this)),
     m_is_running(false), m_created_on(QDateTime::currentDateTime()), m_last_run_on(),
     m_is_in_database(false), m_id(UINT_MAX), m_run_count(0), m_output(new CommandOutputModel(this)),
-    m_run_in(InsideApp)
+    m_run_in(InsideApp), m_updated_on_this_start(false)
 {
     connect(m_process, static_cast<void (QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, &ShellCommand::processFinished);
     connect(m_process, &QProcess::readyReadStandardOutput, this, &ShellCommand::readStandardOutput);
@@ -153,6 +153,20 @@ bool ShellCommand::isStarting() const
     return false;
 }
 
+bool ShellCommand::updatedOnThisStart() const
+{
+    return m_updated_on_this_start;
+}
+
+void ShellCommand::setUpdatedOnThisStart(bool updated)
+{
+    if(m_updated_on_this_start != updated)
+    {
+        m_updated_on_this_start = updated;
+        emit updatedOnThisStartChanged();
+    }
+}
+
 QProcess *ShellCommand::getProcess()
 {
     return m_process;
@@ -185,7 +199,7 @@ QJsonObject ShellCommand::getAsJSONObject()
     return tempObj;
 }
 
-void ShellCommand::startDetached()
+void ShellCommand::startDetached(Executor runner)
 {
     QString file = this->createRunnerScript();
 
@@ -194,10 +208,21 @@ void ShellCommand::startDetached()
         return;
     }
 
+    Executor run_in;
+
+    if(runner == UseSavedRunner)
+    {
+        run_in = m_run_in;
+    }
+    else
+    {
+        run_in = runner;
+    }
+
     QString processName = "fingerterm";
     QString processParam = "-e";
 
-    if(m_run_in == InsideApp)
+    if(run_in == InsideApp)
     {
         processName = file;
         file = "";
@@ -213,7 +238,7 @@ void ShellCommand::startDetached()
     emit runCountChanged();
 }
 
-bool ShellCommand::startProcess()
+bool ShellCommand::startProcess(Executor runner)
 {
     if(m_process == NULL)
     {
@@ -232,10 +257,21 @@ bool ShellCommand::startProcess()
         return false;
     }
 
+    Executor run_in;
+
+    if(runner == UseSavedRunner)
+    {
+        run_in = m_run_in;
+    }
+    else
+    {
+        run_in = runner;
+    }
+
     QString processName = "fingerterm";
     QString processParam = "-e";
 
-    if(m_run_in == InsideApp)
+    if(run_in == InsideApp)
     {
         processName = file;
         file = "";
@@ -259,7 +295,9 @@ bool ShellCommand::startProcess()
 
         m_last_run_on = QDateTime::currentDateTime();
         m_run_count++;
+        m_updated_on_this_start = false;
 
+        emit updatedOnThisStartChanged();
         emit lastRunOnChanged();
         emit runCountChanged();
 

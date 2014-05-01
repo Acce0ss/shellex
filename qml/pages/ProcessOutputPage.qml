@@ -15,24 +15,30 @@ Page {
 
     allowedOrientations: Orientation.All
 
-    function updateCommandHider() {
+    property bool wrapModeOn: true
 
-        if(root.status === PageStatus.Active)
-        {
-            var updateObj = root.command.getAsJSONObject();
-            storageReference.updateCommandLastRunAndCount(updateObj);
-        }
-    }
+    SilicaFlickable {
 
-    SilicaListView {
-        id: outputList
         anchors.fill: parent
 
+        contentHeight: content.height
+        contentWidth: content.width
+
+        flickableDirection: root.wrapModeOn ? Flickable.VerticalFlick : Flickable.HorizontalAndVerticalFlick
+
         PullDownMenu {
+            id: pulleyMenu
+
             MenuItem {
                 text: qsTr("Clear all")
                 onClicked: {
                     command.output.clear();
+                }
+            }
+            MenuItem {
+                text: root.wrapModeOn ? qsTr("Don't wrap text") : qsTr("Wrap text")
+                onClicked: {
+                    root.wrapModeOn = !root.wrapModeOn;
                 }
             }
             MenuItem {
@@ -43,63 +49,68 @@ Page {
             }
         }
 
-        header: Column {
+        Column {
             id: content
 
-            width: parent.width
+            width: childrenRect.width
 
             PageHeader {
+                id: pageTitle
+                width: parent.width
                 title: qsTr("Output")
             }
 
-        }
+            Repeater {
+                id: outputList
 
-        footer: BusyIndicator {
-            anchors.horizontalCenter: parent.horizontalCenter
-            running: Qt.application.active && command.isRunning
-        }
+                model: command.output
 
-        model: command.output
+                delegate: Component {
+                    ListItem {
+                        id: listItem
 
-        spacing: Theme.paddingMedium
+                        x: Theme.paddingLarge
 
-        delegate: Component {
-            ListItem {
-                id: listItem
+                        height: itemLabel.height
+                        contentHeight: itemLabel.height
+                        width: (root.wrapModeOn || pulleyMenu.active) ? (root.width - 2*Theme.paddingLarge)
+                                               : (itemLabel.width)
 
-                height: itemLabel.height
-                contentHeight: itemLabel.height
+                        ListView.onRemove: animateRemoval(listItem)
 
-                ListView.onRemove: animateRemoval(listItem)
+                        Label {
+                            id: itemLabel
+                            anchors.centerIn: parent
 
-                Label {
-                    id: itemLabel
-                    anchors.centerIn: parent
-                    anchors.leftMargin: Theme.paddingLarge
-                    anchors.rightMargin: Theme.paddingLarge
+                            width: (root.wrapModeOn || pulleyMenu.active) ? parent.width : implicitWidth
 
-                    width: parent.width - 2*Theme.paddingLarge
+                            wrapMode: root.wrapModeOn ? Text.WordWrap : Text.NoWrap
+                            text: model.display
+                            color: listItem.highlighted ? Theme.highlightColor : Theme.primaryColor
 
-                    wrapMode: Text.WordWrap
-                    text: model.display
-                    color: listItem.highlighted ? Theme.highlightColor : Theme.primaryColor
+                            font.pixelSize: Theme.fontSizeTiny
+                            font.family: 'monospace'
+                        }
 
-                    font.pixelSize: Theme.fontSizeTiny
+                        onClicked: Clipboard.text = model.display;
+                    }
                 }
-
-                onClicked: Clipboard.text = model.display;
-
+            }
+            BusyIndicator {
+                anchors.horizontalCenter: parent.horizontalCenter
+                running: Qt.application.active && command.isRunning
             }
         }
-
-        VerticalScrollDecorator {}
+        ScrollDecorator {}
     }
 
     onStatusChanged: {
-        if(root.status === PageStatus.Active)
+        if(root.status === PageStatus.Active &&
+                !root.command.updatedOnThisStart)
         {
-           // outputList.scrollToBottom();
+            root.storageReference.updateCommandLastRunAndCount(root.command);
+            root.command.updatedOnThisStart = true;
+
         }
     }
-
 }

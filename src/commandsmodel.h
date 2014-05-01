@@ -50,6 +50,7 @@ public slots:
 
 private:
     void applySearchStringFiltering();
+    void insertOnReset(ShellCommand* toInsert);
 
     QList<ShellCommand*>::iterator binaryBound(QList<ShellCommand*>::iterator start,
                                                QList<ShellCommand*>::iterator end);

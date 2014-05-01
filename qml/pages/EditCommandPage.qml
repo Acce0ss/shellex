@@ -92,7 +92,7 @@ Dialog {
             root.command.content = editField.text;
             root.command.name = editField.text;
             root.command.runIn = runnerChooser.currentItem.value;
-            commandsStore.updateCommand(root.command.getAsJSONObject());
+            commandsStore.updateCommand(root.command);
 
         }
     }

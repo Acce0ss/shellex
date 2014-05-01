@@ -15,6 +15,7 @@ public:
     CommandOutputModel(QObject* parent = 0);
 
     void append(QString outputString);
+    void removeFromFront();
 
     QString outputString();
 
@@ -30,6 +31,7 @@ signals:
     void linesMaxChanged();
 
 public slots:
+
 
     void clear();
 

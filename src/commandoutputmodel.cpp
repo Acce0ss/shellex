@@ -13,7 +13,13 @@ void CommandOutputModel::append(QString outputString)
     m_data.append(outputString);
     endInsertRows();
 
-    if(m_data.length() > m_lines_max)
+    removeFromFront();
+
+}
+
+void CommandOutputModel::removeFromFront()
+{
+    if(rowCount() > m_lines_max)
     {
         int rowsToRemove = m_data.length()-m_lines_max;
 

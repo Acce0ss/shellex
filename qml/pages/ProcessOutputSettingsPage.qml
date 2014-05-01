@@ -51,7 +51,7 @@ Dialog {
         {
             root.command.content = editField.text;
             root.command.name = editField.text;
-            commandsStore.updateCommand(root.command.getAsJSONObject());
+            commandsStore.updateCommand(root.command);
 
         }
     }

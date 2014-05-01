@@ -17,9 +17,9 @@ int CommandsModel::rowCount(const QModelIndex &parent) const
 
 QVariant CommandsModel::data(const QModelIndex &index, int role) const
 {
-    if (index.row() < 0 || index.row() >= m_commands.count())
+    if (!index.isValid())
     {
-        qDebug() << "Tried to access data item " << index.row() << "which is out of range!";
+        qDebug() << "Tried to access data item " << index.row() << "which is not valid!";
         return QVariant();
     }
 
@@ -95,18 +95,18 @@ void CommandsModel::reInsertCommand(ShellCommand *toUpdate)
 
     int hypotheticPosition = (i - temp.begin());
 
-   // qDebug() << index << " != " << hypotheticPosition << " = " << (index != hypotheticPosition);
+  //  qDebug() << index << " != " << hypotheticPosition << " = " << (index != hypotheticPosition);
 
-    if(index != (hypotheticPosition - 1))
+    if(index != (hypotheticPosition))
     {
+        beginResetModel();
         if(index >= 0 && index < m_commands.count())
         {
-            beginRemoveRows(QModelIndex(), index, index);
             m_commands.removeAt(index);
-            endRemoveRows();
 
-            this->insert(toUpdate);
+            this->insertOnReset(toUpdate);
         }
+        endResetModel();
     }
 }
 
@@ -125,7 +125,9 @@ void CommandsModel::sortCommands(CommandsModel::SortType type, bool isResort)
 
     if(newValue || isResort)
     {
-        /*
+
+        beginResetModel();
+
         switch(type)
         {
         case ByLeastRuns:
@@ -158,23 +160,26 @@ void CommandsModel::sortCommands(CommandsModel::SortType type, bool isResort)
         default:
             break;
         }
-        */
+
 
         //hackish way to sort, not optimal.. later change to Sorting proxy model!
         //remove all items and push them into a temp list.
-        while(!m_commands.empty())
-        {
-            beginRemoveRows(QModelIndex(), 0, 0);
-            temp.push_front(m_commands.at(0));
-            m_commands.pop_front();
-            endRemoveRows();
-        }
+//        while(!m_commands.empty())
+//        {
+//        //    beginRemoveRows(QModelIndex(), 0, 0);
+//            temp.push_front(m_commands.at(0));
+//            m_commands.pop_front();
+//          //  endRemoveRows();
+//        }
 
-        //insert them back to the model in the new sorting order
-        for(int i = 0; i < temp.count(); ++i)
-        {
-           this->insert(temp.at(i));
-        }
+//        //insert them back to the model in the new sorting order
+//        for(int i = 0; i < temp.count(); ++i)
+//        {
+//            this->insertOnReset(temp.at(i));
+
+//        }
+
+        endResetModel();
 
     }
 
@@ -216,11 +221,13 @@ void CommandsModel::applySearchStringFiltering()
 
     }
 
+    beginResetModel();
+
     //readd the previous, now hit commands and remove from not being a search result
     for(int i = 0; i < to_readd.count(); i++)
     {
         m_not_searchresult.removeAt(m_not_searchresult.indexOf(to_readd.at(i)));
-        this->insert(to_readd.at(i));
+        this->insertOnReset(to_readd.at(i));
     }
 
     //remove commands that do not contain search term from the model, but keep them in another list
@@ -233,15 +240,29 @@ void CommandsModel::applySearchStringFiltering()
         {
             //qDebug() << "removing " << m_not_searchresult.at(i)->name() << " at " << index
             //         << ", which in m_commands is " << m_commands.at(index)->name();
-            beginRemoveRows(QModelIndex(), index, index);
             m_commands.removeAt(index);
-            endRemoveRows();
         }
     }
+
+    endResetModel();
 
     //qDebug() << "in the end, size of m_commands is " << m_commands.count() << ", of to_readd is " << to_readd.count()
     //         << " and of m_not_searchresult is " << m_not_searchresult.count();
 
+}
+
+void CommandsModel::insertOnReset(ShellCommand *toInsert)
+{
+    int index = 0;
+    if(!m_commands.empty())
+    {
+        QList<ShellCommand*>::iterator i = getInsertPosition(m_sort_type, toInsert, m_commands);
+
+        index = (i - m_commands.begin());
+
+    }
+
+    m_commands.insert(index, toInsert);
 }
 
 

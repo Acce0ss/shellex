@@ -44,8 +44,9 @@ Item {
         }
     }
 
-    function updateCommand(jsonObj) {
-
+    function updateCommand(commandObj)
+    {
+        var jsonObj = commandObj.getAsJSONObject();
         if(jsonObj.isInDatabase === true)
         {
             db.transaction( function(tx)
@@ -65,8 +66,9 @@ Item {
         }
     }
 
-    function updateCommandLastRunAndCount(jsonObj)
+    function updateCommandLastRunAndCount(commandObj)
     {
+        var jsonObj = commandObj.getAsJSONObject();
         if(jsonObj.isInDatabase === true)
         {
             db.transaction( function(tx)
@@ -89,8 +91,9 @@ Item {
         }
     }
 
-    function removeCommand(jsonObj)
+    function removeCommand(commandObj)
     {
+        var jsonObj = commandObj.getAsJSONObject();
         if(jsonObj.isInDatabase === true)
         {
             db.transaction( function(tx)

@@ -23,8 +23,9 @@ class ShellCommand : public QObject
     Q_PROPERTY(QDateTime createdOn READ createdOn NOTIFY createdOnChanged)
     Q_PROPERTY(QDateTime lastRunOn READ lastRunOn NOTIFY lastRunOnChanged)
     Q_PROPERTY(int runCount READ runCount NOTIFY runCountChanged)
+    Q_PROPERTY(bool updatedOnThisStart READ updatedOnThisStart WRITE setUpdatedOnThisStart NOTIFY updatedOnThisStartChanged)
 
-    Q_PROPERTY(CommandOutputModel* output READ output)
+    Q_PROPERTY(CommandOutputModel* output READ output NOTIFY outputChanged)
 
     Q_PROPERTY(bool isRunning READ isRunning NOTIFY isRunningChanged)
     Q_PROPERTY(bool isStarting READ isStarting NOTIFY isStartingChanged)
@@ -34,7 +35,7 @@ class ShellCommand : public QObject
 
 public:
     enum CommandType {Script, SingleLiner};
-    enum Executor {Fingerterm, InsideApp};
+    enum Executor {Fingerterm, InsideApp, UseSavedRunner};
 
     explicit ShellCommand(QObject *parent = 0);
     explicit ShellCommand(QObject *parent, QString name, CommandType type, QString content);
@@ -83,17 +84,19 @@ public:
     unsigned int runCount() const;
     void setRunCount(unsigned int count);
 
-
     CommandOutputModel* output();
 
     bool isRunning() const;
     bool isStarting() const;
 
+    bool updatedOnThisStart() const;
+    void setUpdatedOnThisStart(bool updated);
+
     QProcess* getProcess();
     void initProcess();
 
     Q_INVOKABLE QJsonObject getAsJSONObject();
-    Q_INVOKABLE void startDetached();
+    Q_INVOKABLE void startDetached(Executor runner);
 
 signals:
 
@@ -104,13 +107,16 @@ signals:
     void isRunningChanged();
     void isStartingChanged();
     void runInChanged();
+    void updatedOnThisStartChanged();
 
     void lastRunOnChanged();
     void createdOnChanged();
     void runCountChanged();
+
+    void outputChanged();
 public slots:
 
-    bool startProcess();
+    bool startProcess(Executor runner);
 
     void stopProcess();
 
@@ -147,6 +153,7 @@ private:
 
     Executor m_run_in;
 
+    bool m_updated_on_this_start;
 };
 
 #endif // SHELLCOMMAND_H

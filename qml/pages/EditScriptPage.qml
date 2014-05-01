@@ -65,7 +65,7 @@ Dialog {
         {
             root.command.content = editField.text;
             root.command.name = editField.text;
-            commandStore.updateCommand(root.command.getAsJSONObject());
+            commandStore.updateCommand(root.command);
             if(root.modeller.sortType === ShellExecutor.ByName ||
                     root.modeller.sortType === ShellExecutor.ByNameReverse)
             {

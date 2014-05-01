@@ -17,99 +17,16 @@ ListItem {
 
     z: 10
 
-    Column {
-
-        height: parent.contentHeight
-        width: parent.width-Theme.paddingLarge*2
-        anchors.horizontalCenter: parent.horizontalCenter
-
-        Row {
-            spacing: Theme.paddingLarge
-
-            height: parent.height*0.5
-            width: parent.width*0.8
-
-            Flickable {
-                height: parent.height
-                width: parent.width*0.8
-
-                pressDelay: 0
-
-                contentWidth: desc.width
-                flickableDirection: Flickable.HorizontalFlick
-
-                clip: true
-
-                z: 1
-
-                Label {
-                    anchors.verticalCenter: parent.verticalCenter
-
-                    id: desc
-                    text: model.display.name
-                    color: root.highlighted ? Theme.highlightColor : Theme.primaryColor
-                    truncationMode: TruncationMode.Fade
-                }
-
-            }
-            Item {
-                width: runIndicator.width
-                height: parent.height
-                anchors.verticalCenter: parent.verticalCenter
-
-                Image {
-                    visible: runIndicator.running
-                    anchors.centerIn: parent
-
-                    height: runIndicator.height
-                    width: runIndicator.height
-
-                    opacity: 0.5
-
-                    source: "../images/running.png"
-                    fillMode: Image.PreserveAspectFit
-                }
-                BusyIndicator {
-                    id: runIndicator
-                    anchors.centerIn: parent
-                    running: Qt.application.active && model.display.isRunning
-                    size: BusyIndicatorSize.Small
-                    z: 1
-                }
-            }
-            Label {
-                width: parent.width*0.2
-                text: qsTr("used\n%1 times").arg(model.display.runCount)
-                font.pixelSize: Theme.fontSizeTiny
-                color: root.highlighted ? Theme.highlightColor : Theme.secondaryColor
-            }
-        }
-
-        Label {
-            id: dateCreatedLabel
-
-            text: qsTr("Created on %1").arg(model.display.createdOn.toLocaleString(undefined, Locale.ShortFormat))
-            font.pixelSize: Theme.fontSizeTiny
-            color: root.highlighted ? Theme.highlightColor : Theme.secondaryColor
-        }
-
-        Label {
-
-            text: qsTr("Last run on %1").arg(model.display.lastRunOn.toLocaleString(undefined, Locale.ShortFormat))
-            font.pixelSize: Theme.fontSizeTiny
-            color: root.highlighted ? Theme.highlightColor : Theme.secondaryColor
-        }
-
-    }
+    CommandInfoView { }
 
     onClicked: {
+
+        routineLib.openOutputPage(model.display, ShellCommand.UseSavedRunner);
+
         if(model.display.isRunning === false)
         {
-            model.display.startProcess();
+            model.display.startProcess(ShellCommand.UseSavedRunner);
         }
-
-        pageStack.push(Qt.resolvedUrl("ProcessOutputPage.qml"), {command: model.display, storageReference: storage});
-        pageStack.currentPage.statusChanged.connect(pageStack.currentPage.updateCommandHider);
 
     }
 
@@ -128,7 +45,7 @@ ListItem {
         MenuItem {
             text: qsTr("Run detached")
             onClicked: {
-                model.display.startDetached();
+                model.display.startDetached(ShellCommand.UseSavedRunner);
             }
             Label {
                 visible: parent.enabled
@@ -183,7 +100,7 @@ ListItem {
 
     function remove() {
         remorseAction(qsTr("Deleting"), function() {
-            commandsStore.removeCommand(model.display.getAsJSONObject())}
+            commandsStore.removeCommand(model.display)}
         );
     }
 }
