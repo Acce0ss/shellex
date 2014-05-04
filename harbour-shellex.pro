@@ -14,7 +14,8 @@ SOURCES += src/harbour-shellex.cpp \
     src/shellexecutor.cpp \
     src/shellcommand.cpp \
     src/commandoutputmodel.cpp \
-    src/commandsmodel.cpp
+    src/commandsmodel.cpp \
+    src/settings.cpp
 
 OTHER_FILES += qml/harbour-shellex.qml \
     qml/cover/CoverPage.qml \
@@ -33,12 +34,14 @@ OTHER_FILES += qml/harbour-shellex.qml \
     qml/pages/EditScriptPage.qml \
     qml/Routine.qml \
     qml/pages/InfoPage.qml \
-    qml/pages/ProcessOutputSettingsPage.qml \
-    qml/pages/CommandInfoView.qml
+    qml/pages/CommandInfoView.qml \
+    qml/pages/NumberOfLinesField.qml \
+    qml/GlobalSettings.qml
 
 HEADERS += \
     src/shellexecutor.h \
     src/shellcommand.h \
     src/commandoutputmodel.h \
-    src/commandsmodel.h
+    src/commandsmodel.h \
+    src/settings.h
 

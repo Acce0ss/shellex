@@ -9,13 +9,14 @@ class CommandOutputModel : public QAbstractListModel
     Q_OBJECT
 
     Q_PROPERTY(int linesMax READ linesMax WRITE setLinesMax NOTIFY linesMaxChanged)
+    Q_PROPERTY(int count READ count NOTIFY countChanged)
+
     Q_PROPERTY(QString outputString READ outputString)
 
 public:
     CommandOutputModel(QObject* parent = 0);
 
     void append(QString outputString);
-    void removeFromFront();
 
     QString outputString();
 
@@ -29,10 +30,12 @@ public:
 signals:
 
     void linesMaxChanged();
+    void countChanged();
 
 public slots:
 
-
+    void removeFromFront();
+    int count() const;
     void clear();
 
 private:

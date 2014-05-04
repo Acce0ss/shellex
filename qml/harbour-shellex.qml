@@ -24,6 +24,10 @@ ApplicationWindow
         id: routineLib
     }
 
+    GlobalSettings {
+        id: globalSettings
+    }
+
     ShellExecutor {
         id: sheller
     }

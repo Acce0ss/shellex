@@ -13,23 +13,25 @@ void CommandOutputModel::append(QString outputString)
     m_data.append(outputString);
     endInsertRows();
 
-    removeFromFront();
-
+    if(m_data.count() > m_lines_max)
+    {
+        beginRemoveRows(QModelIndex(), 0, 0);
+        m_data.pop_front();
+        endRemoveRows();
+    }
+    emit countChanged();
 }
 
 void CommandOutputModel::removeFromFront()
 {
-    if(rowCount() > m_lines_max)
+
+    if(!m_data.empty())
     {
-        int rowsToRemove = m_data.length()-m_lines_max;
+        beginRemoveRows(QModelIndex(), 0, 0);
+        m_data.pop_front();
+        endRemoveRows();
 
-        for(int i = 0; i < rowsToRemove; i++)
-        {
-            beginRemoveRows(QModelIndex(), 0, 0);
-            m_data.pop_front();
-            endRemoveRows();
-        }
-
+        emit countChanged();
     }
 }
 
@@ -45,7 +47,7 @@ int CommandOutputModel::rowCount(const QModelIndex &parent) const
 
 QVariant CommandOutputModel::data(const QModelIndex &index, int role) const
 {
-    if (index.row() < 0 || index.row() >= m_data.count())
+    if (!index.isValid())
     {
         return QVariant();
     }
@@ -71,9 +73,16 @@ void CommandOutputModel::setLinesMax(int lines)
     }
 }
 
+int CommandOutputModel::count() const
+{
+    return m_data.count();
+}
+
 void CommandOutputModel::clear()
 {
     beginRemoveRows(QModelIndex(), 0, m_data.size()-1);
     m_data.clear();
     endRemoveRows();
+
+    emit countChanged();
 }
