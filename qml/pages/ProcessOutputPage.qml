@@ -91,6 +91,7 @@ Page {
                 width: (root.wrapModeOn) ? root.width : (maxLabelLength + 2*Theme.paddingLarge)
 
                 Button {
+                    width: content.width
                     text: drawer.open ? qsTr("Hide options") : qsTr("Show options")
                     anchors.horizontalCenter: parent.horizontalCenter
                     onClicked: {

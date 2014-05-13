@@ -13,12 +13,8 @@ void CommandOutputModel::append(QString outputString)
     m_data.append(outputString);
     endInsertRows();
 
-    if(m_data.count() > m_lines_max)
-    {
-        beginRemoveRows(QModelIndex(), 0, 0);
-        m_data.pop_front();
-        endRemoveRows();
-    }
+    this->truncateToMaxLines();
+
     emit countChanged();
 }
 
@@ -80,9 +76,22 @@ int CommandOutputModel::count() const
 
 void CommandOutputModel::clear()
 {
-    beginRemoveRows(QModelIndex(), 0, m_data.size()-1);
+    beginResetModel();
     m_data.clear();
-    endRemoveRows();
+    endResetModel();
 
     emit countChanged();
+}
+
+void CommandOutputModel::truncateToMaxLines()
+{
+    if(m_data.count() > m_lines_max)
+    {
+        while(m_data.count() > m_lines_max)
+        {
+            beginRemoveRows(QModelIndex(), 0, 0);
+            m_data.pop_front();
+            endRemoveRows();
+        }
+    }
 }

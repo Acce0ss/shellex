@@ -154,6 +154,8 @@ private:
     Executor m_run_in;
 
     bool m_updated_on_this_start;
+
+    int m_lines_max;
 };
 
 #endif // SHELLCOMMAND_H

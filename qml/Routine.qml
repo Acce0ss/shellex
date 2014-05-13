@@ -6,15 +6,27 @@ import harbour.shellex 1.0
 QtObject {
     id: root
 
-    function createStoredCommand(name, content, type, runnerType) {
+    function createStoredCommand(name, content, type, runnerType, linesMax) {
 
         var existing = sheller.getCommandNamed(name);
 
         if(existing === null)
         {
+            var runnerName = "Fingerterm";
+            switch(runnerType)
+            {
+            case ShellCommand.Fingerterm:
+                break;
+            case ShellCommand.Script:
+                runnerName = "Script";
+                break;
+            default:
+                console.log("Error");
+            }
+
             var newObj = {name: name, content: content,
                 createdOn: new Date().getTime()/1000, lastRunOn: new Date().getTime()/1000,
-                type: type, runIn: runnerType};
+                type: type, runIn: runnerName, linesMax: linesMax};
 
             var created = commandsStore.addCommand(newObj);
 

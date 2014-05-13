@@ -44,6 +44,7 @@ TextField {
                     difference--;
                 }
             }
+            commandsStore.updateCommandLinesMax(root.command);
             editAccepted = true;
         }
     }

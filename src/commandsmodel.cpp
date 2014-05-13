@@ -53,60 +53,76 @@ void CommandsModel::removeAt(int index)
         beginRemoveRows(QModelIndex(), index, index);
         m_commands.removeAt(index);
         endRemoveRows();
-        temp->deleteLater();
+        if(temp != NULL)
+        {
+            temp->deleteLater();
+        }
     }
 }
 
 void CommandsModel::insert(ShellCommand *toInsert)
 {
-    int index = 0;
-    if(!m_commands.empty())
+    if(toInsert != NULL)
     {
-        QList<ShellCommand*>::iterator i = getInsertPosition(m_sort_type, toInsert, m_commands);
+        int index = 0;
+        if(!m_commands.empty())
+        {
+            QList<ShellCommand*>::iterator i = getInsertPosition(m_sort_type, toInsert, m_commands);
 
-        index = (i - m_commands.begin());
+            index = (i - m_commands.begin());
 
+        }
+
+        beginInsertRows(QModelIndex(), index, index);
+        m_commands.insert(index, toInsert);
+        endInsertRows();
     }
-
-    beginInsertRows(QModelIndex(), index, index);
-    m_commands.insert(index, toInsert);
-    endInsertRows();
 }
 
 int CommandsModel::indexOf(ShellCommand *searchObj)
 {
-    return m_commands.indexOf(searchObj);
+    if(searchObj != NULL)
+    {
+        return m_commands.indexOf(searchObj);
+    }
+    return -1;
 }
 
 ShellCommand *CommandsModel::at(int index)
 {
-    return m_commands.at(index);
+    if(index >= 0 && index < m_commands.count())
+    {
+        return m_commands.at(index);
+    }
 }
 
 void CommandsModel::reInsertCommand(ShellCommand *toUpdate)
 {
-    int index = m_commands.indexOf(toUpdate);
-
-    QList<ShellCommand*> temp = m_commands;
-
-    temp.removeAt(index);
-
-    QList<ShellCommand*>::iterator i = getInsertPosition(m_sort_type, toUpdate, temp);
-
-    int hypotheticPosition = (i - temp.begin());
-
-  //  qDebug() << index << " != " << hypotheticPosition << " = " << (index != hypotheticPosition);
-
-    if(index != (hypotheticPosition))
+    if(toUpdate != NULL)
     {
-        beginResetModel();
-        if(index >= 0 && index < m_commands.count())
-        {
-            m_commands.removeAt(index);
+        int index = m_commands.indexOf(toUpdate);
 
-            this->insertOnReset(toUpdate);
+        QList<ShellCommand*> temp = m_commands;
+
+        temp.removeAt(index);
+
+        QList<ShellCommand*>::iterator i = getInsertPosition(m_sort_type, toUpdate, temp);
+
+        int hypotheticPosition = (i - temp.begin());
+
+        //  qDebug() << index << " != " << hypotheticPosition << " = " << (index != hypotheticPosition);
+
+        if(index != (hypotheticPosition))
+        {
+            beginResetModel();
+            if(index >= 0 && index < m_commands.count())
+            {
+                m_commands.removeAt(index);
+
+                this->insertOnReset(toUpdate);
+            }
+            endResetModel();
         }
-        endResetModel();
     }
 }
 
@@ -200,9 +216,12 @@ void CommandsModel::applySearchStringFiltering()
     for(int i = 0; i < m_not_searchresult.count(); i++)
     {
 
-        if(m_not_searchresult.at(i)->name().toLower().contains(m_searchString.toLower()))
+        if(m_not_searchresult.at(i) != NULL)
         {
-            to_readd.push_back(m_not_searchresult.at(i));
+            if(m_not_searchresult.at(i)->name().toLower().contains(m_searchString.toLower()))
+            {
+                to_readd.push_back(m_not_searchresult.at(i));
+            }
         }
     }
 
@@ -212,11 +231,14 @@ void CommandsModel::applySearchStringFiltering()
     //find commands that do not fit into the search anymore
     for(int i = 0; i < m_commands.count(); i++)
     {
-        //qDebug() << "Checking command at index " << i << ", " << m_commands.at(i)->name();
-        if(!m_commands.at(i)->name().toLower().contains(m_searchString.toLower()))
+        if(m_commands.at(i) != NULL)
         {
-            //qDebug() << m_searchString << " is not in " << m_commands.at(i)->name();
-            m_not_searchresult.push_back(m_commands.at(i));
+            //qDebug() << "Checking command at index " << i << ", " << m_commands.at(i)->name();
+            if(!m_commands.at(i)->name().toLower().contains(m_searchString.toLower()))
+            {
+                //qDebug() << m_searchString << " is not in " << m_commands.at(i)->name();
+                m_not_searchresult.push_back(m_commands.at(i));
+            }
         }
 
     }
@@ -226,21 +248,31 @@ void CommandsModel::applySearchStringFiltering()
     //readd the previous, now hit commands and remove from not being a search result
     for(int i = 0; i < to_readd.count(); i++)
     {
-        m_not_searchresult.removeAt(m_not_searchresult.indexOf(to_readd.at(i)));
-        this->insertOnReset(to_readd.at(i));
+        if(to_readd.at(i) != NULL)
+        {
+            int index = m_not_searchresult.indexOf(to_readd.at(i));
+            if(index >= 0 && index < m_not_searchresult.count())
+            {
+                m_not_searchresult.removeAt(index);
+                this->insertOnReset(to_readd.at(i));
+            }
+        }
     }
 
     //remove commands that do not contain search term from the model, but keep them in another list
     for(int i = 0; i < m_not_searchresult.count(); i++)
     {
 
-        int index = m_commands.indexOf(m_not_searchresult.at(i));
-
-        if(index >= 0 && index < m_commands.count())
+        if(m_not_searchresult.at(i) != NULL)
         {
-            //qDebug() << "removing " << m_not_searchresult.at(i)->name() << " at " << index
-            //         << ", which in m_commands is " << m_commands.at(index)->name();
-            m_commands.removeAt(index);
+            int index = m_commands.indexOf(m_not_searchresult.at(i));
+
+            if(index >= 0 && index < m_commands.count())
+            {
+                //qDebug() << "removing " << m_not_searchresult.at(i)->name() << " at " << index
+                //         << ", which in m_commands is " << m_commands.at(index)->name();
+                m_commands.removeAt(index);
+            }
         }
     }
 
@@ -253,16 +285,19 @@ void CommandsModel::applySearchStringFiltering()
 
 void CommandsModel::insertOnReset(ShellCommand *toInsert)
 {
-    int index = 0;
-    if(!m_commands.empty())
+    if(toInsert != NULL)
     {
-        QList<ShellCommand*>::iterator i = getInsertPosition(m_sort_type, toInsert, m_commands);
+        int index = 0;
+        if(!m_commands.empty())
+        {
+            QList<ShellCommand*>::iterator i = getInsertPosition(m_sort_type, toInsert, m_commands);
 
-        index = (i - m_commands.begin());
+            index = (i - m_commands.begin());
 
+        }
+
+        m_commands.insert(index, toInsert);
     }
-
-    m_commands.insert(index, toInsert);
 }
 
 
@@ -312,13 +347,20 @@ void CommandsModel::sortCommandsByIsRunning()
 
     for(int i=0; i<m_commands.length(); i++)
     {
-        if(m_commands.at(i)->isRunning())
+        if(m_commands.at(i) != NULL)
         {
-            sortedCommands.push_front(m_commands.at(i));
+            if(m_commands.at(i)->isRunning())
+            {
+                sortedCommands.push_front(m_commands.at(i));
+            }
+            else
+            {
+                sortedCommands.push_back(m_commands.at(i));
+            }
         }
         else
         {
-            sortedCommands.push_back(m_commands.at(i));
+            qDebug() << "Error: Null in the model";
         }
     }
 
@@ -390,9 +432,13 @@ ShellCommand *CommandsModel::findCommandByName(QString command)
     for(int i = 0; i < rowCount(); i++)
     {
 
-        if(m_commands.at(i)->name() == command)
+        ShellCommand* temp = m_commands.at(i);
+        if(temp != NULL)
         {
-            return m_commands.at(i);
+            if(temp->name() == command)
+            {
+                return temp;
+            }
         }
     }
 
@@ -405,9 +451,13 @@ ShellCommand *CommandsModel::findCommandById(unsigned int id)
     for(int i = 0; i < rowCount(); i++)
     {
 
-        if(m_commands.at(i)->id() == id)
+        ShellCommand* temp = m_commands.at(i);
+        if(temp != NULL)
         {
-            return m_commands.at(i);
+            if(temp->id() == id)
+            {
+                return temp;
+            }
         }
     }
 

@@ -16,11 +16,12 @@ ShellCommand::ShellCommand(QObject *parent) :
     QObject(parent), m_name(""), m_type(SingleLiner), m_content(""), m_process(new QProcess(this)),
     m_is_running(false), m_created_on(QDateTime::currentDateTime()), m_last_run_on(),
     m_is_in_database(false), m_id(UINT_MAX), m_run_count(0), m_output(new CommandOutputModel(this)),
-    m_run_in(InsideApp), m_updated_on_this_start(false)
+    m_run_in(InsideApp), m_updated_on_this_start(false), m_lines_max(10)
 {
     connect(m_process, static_cast<void (QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, &ShellCommand::processFinished);
     connect(m_process, &QProcess::readyReadStandardOutput, this, &ShellCommand::readStandardOutput);
     connect(m_process, &QProcess::readyReadStandardError, this, &ShellCommand::readStandardError);
+
 }
 
 
@@ -28,11 +29,12 @@ ShellCommand::ShellCommand(QObject *parent, QString name, CommandType type, QStr
     QObject(parent), m_name(name), m_type(type), m_content(content), m_process(new QProcess(this)),
     m_is_running(false), m_created_on(QDateTime::currentDateTime()), m_last_run_on(),
     m_is_in_database(false), m_id(UINT_MAX), m_run_count(0), m_output(new CommandOutputModel(this)),
-    m_run_in(InsideApp), m_updated_on_this_start(false)
+    m_run_in(InsideApp), m_updated_on_this_start(false), m_lines_max(10)
 {
     connect(m_process, static_cast<void (QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, &ShellCommand::processFinished);
     connect(m_process, &QProcess::readyReadStandardOutput, this, &ShellCommand::readStandardOutput);
     connect(m_process, &QProcess::readyReadStandardError, this, &ShellCommand::readStandardError);
+
 }
 
 QString ShellCommand::name() const
@@ -183,6 +185,7 @@ QJsonObject ShellCommand::getAsJSONObject()
     tempObj.insert("isInDatabase", QJsonValue(m_is_in_database));
     tempObj.insert("runCount", QJsonValue((int)m_run_count));
     tempObj.insert("id", QJsonValue((int)m_id));
+    tempObj.insert("linesMax", QJsonValue(m_output->linesMax()));
 
     switch(m_type)
     {
@@ -191,6 +194,18 @@ QJsonObject ShellCommand::getAsJSONObject()
         break;
     case Script:
         tempObj.insert("type", QJsonValue(QString("Script")));
+        break;
+    default:
+        break;
+    }
+
+    switch(m_run_in)
+    {
+    case Fingerterm:
+        tempObj.insert("runIn", QJsonValue(QString("Fingerterm")));
+        break;
+    case InsideApp:
+        tempObj.insert("runIn", QJsonValue(QString("InsideApp")));
         break;
     default:
         break;
@@ -322,9 +337,8 @@ void ShellCommand::stopProcess()
         QStringList params;
         params << "-P";
         params << QString::number(pid);
-        QProcess killer;
-        killer.start("pkill", params );
-        killer.waitForFinished();
+
+        QProcess::startDetached("pkill", params );
 
         m_process->close();
     }
@@ -482,55 +496,65 @@ ShellCommand *ShellCommand::fromJSONObject(QJsonObject JSONObject)
 {
     ShellCommand * toBeCreated = new ShellCommand();
 
-    toBeCreated->setName(JSONObject["name"].toString());
-    toBeCreated->setContent(JSONObject["content"].toString());
-    toBeCreated->setCreatedOn(QDateTime::fromTime_t((int)JSONObject["createdOn"].toDouble()));
-    toBeCreated->setLastRunOn(QDateTime::fromTime_t((int)JSONObject["lastRunOn"].toDouble()));
-    toBeCreated->setRunCount((int)JSONObject["runCount"].toDouble());
-
-    if(JSONObject.contains("isInDatabase"))
+    if(toBeCreated != NULL)
     {
-        toBeCreated->setIsInDatabase((((int)JSONObject["isInDatabase"].toDouble() != 0)));
+
+        toBeCreated->setName(JSONObject["name"].toString());
+        toBeCreated->setContent(JSONObject["content"].toString());
+        toBeCreated->setCreatedOn(QDateTime::fromTime_t((int)JSONObject["createdOn"].toDouble()));
+        toBeCreated->setLastRunOn(QDateTime::fromTime_t((int)JSONObject["lastRunOn"].toDouble()));
+        toBeCreated->setRunCount((int)JSONObject["runCount"].toDouble());
+        toBeCreated->output()->setLinesMax((int)JSONObject["linesMax"].toDouble());
+
+        if(JSONObject.contains("isInDatabase"))
+        {
+            toBeCreated->setIsInDatabase((((int)JSONObject["isInDatabase"].toDouble() != 0)));
+
+        }
+        else
+        {
+            toBeCreated->setIsInDatabase(false);
+        }
+
+        if(JSONObject.contains("id"))
+        {
+            toBeCreated->setId((int)JSONObject["id"].toDouble());
+        }
+        else
+        {
+            toBeCreated->setId(UINT_MAX);
+        }
+
+        if(JSONObject["type"].toString() == "SingleLiner")
+        {
+            toBeCreated->setType(SingleLiner);
+        }
+        else if(JSONObject["type"].toString() == "Script")
+        {
+            toBeCreated->setType(Script);
+        }
+
+        if(JSONObject["runIn"].toString() == "Fingerterm")
+        {
+            toBeCreated->setRunIn(Fingerterm);
+        }
+        else if(JSONObject["runIn"].toString() == "InsideApp")
+        {
+            toBeCreated->setRunIn(InsideApp);
+        }
 
     }
     else
     {
-        toBeCreated->setIsInDatabase(false);
+        qDebug() << "Error creating command from " << JSONObject.toVariantMap() << " : operator 'new' returned NULL.";
     }
-
-    if(JSONObject.contains("id"))
-    {
-        toBeCreated->setId((int)JSONObject["id"].toDouble());
-    }
-    else
-    {
-        toBeCreated->setId(UINT_MAX);
-    }
-
-    if(JSONObject["type"].toString() == "SingleLiner")
-    {
-        toBeCreated->setType(SingleLiner);
-    }
-    else if(JSONObject["type"].toString() == "Script")
-    {
-        toBeCreated->setType(Script);
-    }
-
-    if(JSONObject["runIn"].toString() == "Fingerterm")
-    {
-        toBeCreated->setRunIn(Fingerterm);
-    }
-    else if(JSONObject["runIn"].toString() == "InsideApp")
-    {
-        toBeCreated->setRunIn(InsideApp);
-    }
-
     //qDebug() << "Creating command: name: " << toBeCreated->name()
     //         << " type: " << toBeCreated->type() << " createdOn: " << toBeCreated->createdOn()
     //         << " lastRunOn: " << toBeCreated->lastRunOn() << " content: " << toBeCreated->content()
     //         << " isInDatabase: " << toBeCreated->isInDatabase() << " id: " << toBeCreated->id();
 
     return toBeCreated;
+
 }
 
 bool ShellCommand::newerThan(const ShellCommand *subject, const ShellCommand *test)
@@ -617,16 +641,16 @@ bool ShellCommand::alphabeticallyAfter(const ShellCommand *subject, const ShellC
 
 ShellCommand::~ShellCommand()
 {
-    if(m_process != NULL)
-    {
-        m_process->close();
-        m_process->deleteLater();
-    }
+//    if(m_process != NULL)
+//    {
+//        m_process->close();
+//        m_process->deleteLater();
+//    }
 
-    if(m_output != NULL)
-    {
-        m_output->deleteLater();
-    }
+//    if(m_output != NULL)
+//    {
+//        m_output->deleteLater();
+//    }
 
 }
 

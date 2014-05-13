@@ -38,6 +38,8 @@ public slots:
     int count() const;
     void clear();
 
+    void truncateToMaxLines();
+
 private:
 
     QStringList m_data;

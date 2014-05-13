@@ -30,11 +30,6 @@ Item {
 
             var created = shell.addCommandFromJSON(jsonObj);
 
-            if(created === null)
-            {
-                return null;
-            }
-
             return created;
         }
         catch(e)
@@ -51,10 +46,10 @@ Item {
         {
             db.transaction( function(tx)
             {
-                tx.executeSql("UPDATE commands SET name=?,type=?,lastRunOn=?,content=?,runCount=? "
+                tx.executeSql("UPDATE commands SET name=?,type=?,content=? "
                               + " WHERE id=?",
-                              [jsonObj.name, jsonObj.type, jsonObj.lastRunOn,
-                               jsonObj.content,jsonObj.runCount, jsonObj.id]
+                              [jsonObj.name, jsonObj.type,
+                               jsonObj.content, jsonObj.id]
                               );
             } );
 
@@ -91,6 +86,30 @@ Item {
         }
     }
 
+    function updateCommandLinesMax(commandObj)
+    {
+        var jsonObj = commandObj.getAsJSONObject();
+        if(jsonObj.isInDatabase === true)
+        {
+            db.transaction( function(tx)
+            {
+
+
+                tx.executeSql("UPDATE commands SET linesMax=? WHERE id=?",
+                              [jsonObj.linesMax,
+                               jsonObj.id]
+                              );
+
+
+            } );
+
+        }
+        else
+        {
+            console.log("Error, command not in database");
+        }
+    }
+
     function removeCommand(commandObj)
     {
         var jsonObj = commandObj.getAsJSONObject();
@@ -114,9 +133,11 @@ Item {
 
     Component.onCompleted: {
 
-        db = LocalStorage.openDatabaseSync("harbour-shellex", "0.1",
+        db = LocalStorage.openDatabaseSync("harbour-shellex", "0.2",
                                            qsTr("Database for ShellEx commands and scripts")
                                            ,10000);
+
+        console.log(db.version);
 
         db.transaction( function(tx)
         {

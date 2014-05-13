@@ -82,15 +82,19 @@ ListItem {
             }
         }
         MenuItem {
-            text: model.display.isRunning ? qsTr("Stop") : qsTr("Remove")
+            text: model.display !== null ?
+                      (model.display.isRunning ? qsTr("Stop") : qsTr("Remove")) : ""
             onClicked: {
-                if(model.display.isRunning)
+                if(model.display !== null)
                 {
-                    model.display.stopProcess();
-                }
-                else
-                {
-                    root.remove();
+                    if(model.display.isRunning)
+                    {
+                        model.display.stopProcess();
+                    }
+                    else
+                    {
+                        root.remove();
+                    }
                 }
             }
         }

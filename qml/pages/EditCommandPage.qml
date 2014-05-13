@@ -84,7 +84,8 @@ Dialog {
         if(editAsNew === true)
         {
             routineLib.createStoredCommand(editField.text, editField.text,
-                                           "SingleLiner", runnerChooser.currentItem.value);
+                                           "SingleLiner", runnerChooser.currentItem.value,
+                                           command.output.linesMax);
 
         }
         else

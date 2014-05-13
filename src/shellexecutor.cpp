@@ -145,6 +145,10 @@ void ShellExecutor::removeCommandById(unsigned int id)
         m_commands->removeAt(m_commands->indexOf(temp));
         temp->deleteLater();
     }
+    else
+    {
+        qDebug() << "Warning: failed to remove command by id " << id << ", not in the model.";
+    }
 }
 
 void ShellExecutor::updateCommandById(unsigned int id)
@@ -155,12 +159,23 @@ void ShellExecutor::updateCommandById(unsigned int id)
     {
        m_commands->reInsertCommand(temp);
     }
+    else
+    {
+        qDebug() << "Warning: failed to update command by id " << id << ", not in the model.";
+    }
 }
 
 QObject* ShellExecutor::addCommandFromJSON(QJsonObject object)
 {
     ShellCommand* temp = ShellCommand::fromJSONObject(object);
-    m_commands->insert(temp);
+    if(temp != NULL)
+    {
+        m_commands->insert(temp);
+    }
+    else
+    {
+        qDebug() << "Error: trying to insert null object (from: " << object.toVariantMap() << ")";
+    }
 
     return dynamic_cast<QObject*>(temp);
 }
@@ -182,5 +197,6 @@ void ShellExecutor::reSortCommands()
 
 void ShellExecutor::refreshCommandsModel()
 {
-    emit commandsModelChanged();
+    //probably not needed, in testing
+    //emit commandsModelChanged();
 }
