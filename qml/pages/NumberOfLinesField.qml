@@ -17,8 +17,8 @@ TextField {
     placeholderText: qsTr("Number of lines")
     inputMethodHints: Qt.ImhDigitsOnly
     label: (editAccepted && acceptableInput)
-                        ? qsTr("Set temporary number of lines (edit command for permanent setup)")
-                        : qsTr("Press enter to apply number of lines")
+                        ? qsTr("Set number of lines")
+                        : qsTr("Press enter to apply")
 
     onTextChanged: {
 

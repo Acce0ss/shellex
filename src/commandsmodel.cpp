@@ -10,6 +10,21 @@ CommandsModel::CommandsModel(QObject *parent) :
 {
 }
 
+CommandsModel::~CommandsModel()
+{
+    qDebug() << "CommandsModel dying";
+    for(int i = 0; i < m_commands.length(); i++)
+    {
+        if(m_commands.at(i) != NULL)
+        {
+            m_commands.at(i)->stopProcess();
+            m_commands.at(i)->deleteLater();
+        }
+    }
+
+    m_commands.clear();
+}
+
 int CommandsModel::rowCount(const QModelIndex &parent) const
 {
     return m_commands.count();

@@ -1,6 +1,5 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-
 import harbour.shellex 1.0
 
 QtObject {
@@ -12,16 +11,17 @@ QtObject {
 
         if(existing === null)
         {
-            var runnerName = "Fingerterm";
+            var runnerName = "";
             switch(runnerType)
             {
             case ShellCommand.Fingerterm:
+                runnerName = "Fingerterm";
                 break;
-            case ShellCommand.Script:
-                runnerName = "Script";
+            case ShellCommand.InsideApp:
+                runnerName = "InsideApp";
                 break;
             default:
-                console.log("Error");
+                console.log("Error: invalid runner type: " + runnerType);
             }
 
             var newObj = {name: name, content: content,

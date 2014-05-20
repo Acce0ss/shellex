@@ -16,10 +16,10 @@ Item {
         try {
             db.transaction( function (tx) {
 
-                tx.executeSql("INSERT INTO commands(name,type,createdOn,lastRunOn,content,isInDatabase,runCount)"
-                              +" VALUES(?,?,?,?,?,?,?)",
+                tx.executeSql("INSERT INTO commands(name,type,createdOn,lastRunOn,content,isInDatabase,runCount,runIn,linesMax)"
+                              +" VALUES(?,?,?,?,?,?,?,?,?)",
                               [jsonObj.name, jsonObj.type, jsonObj.createdOn,
-                               jsonObj.lastRunOn, jsonObj.content, 1, 0]);
+                               jsonObj.lastRunOn, jsonObj.content, 1, 0, jsonObj.runIn, 100]);
 
                 var resultForId = tx.executeSql("SELECT id FROM commands WHERE name=?",[jsonObj.name]);
 
@@ -46,10 +46,10 @@ Item {
         {
             db.transaction( function(tx)
             {
-                tx.executeSql("UPDATE commands SET name=?,type=?,content=? "
+                tx.executeSql("UPDATE commands SET name=?,type=?,content=?,runIn=? "
                               + " WHERE id=?",
                               [jsonObj.name, jsonObj.type,
-                               jsonObj.content, jsonObj.id]
+                               jsonObj.content, jsonObj.runIn, jsonObj.id]
                               );
             } );
 
@@ -131,30 +131,14 @@ Item {
         }
     }
 
-    Component.onCompleted: {
-
-        db = LocalStorage.openDatabaseSync("harbour-shellex", "0.2",
-                                           qsTr("Database for ShellEx commands and scripts")
-                                           ,10000);
-
-        console.log(db.version);
+    function initModelsFromDB()
+    {
 
         db.transaction( function(tx)
         {
-            tx.executeSql('CREATE TABLE IF NOT EXISTS commands('
-                          + 'id INTEGER PRIMARY KEY AUTOINCREMENT,'
-                          + 'name TEXT UNIQUE,'
-                          + 'type TEXT,'
-                          + 'createdOn INTEGER,'
-                          + 'lastRunOn INTEGER,'
-                          + 'runCount INTEGER,'
-                          + 'isInDatabase BOOLEAN,'
-                          + 'content TEXT' //needs to be json compliant string:
-                          //{content:"cp $1 $2",params:[{param1},{param2}, ...]}
-                          //params have form of {hint: "source file"}
-                          + ')');
 
-            var result = tx.executeSql('SELECT id,name,type,isInDatabase,createdOn,lastRunOn,content,runCount FROM commands');
+            var result = tx.executeSql('SELECT id,name,type,isInDatabase,createdOn,lastRunOn,'
+                                             +'content,runCount,runIn,linesMax FROM commands');
 
             var list = [];
 
@@ -168,7 +152,51 @@ Item {
             shell.initFromJSONArray(list);
         }
         );
+    }
 
+    Component.onCompleted: {
 
+        db = LocalStorage.openDatabaseSync("harbour-shellex", "",
+                                           qsTr("Database for ShellEx commands and scripts")
+                                           ,10000);
+
+        if( db.version === "0.1")
+        {
+            console.log( "Upgrading database from version " + db.version + " to version 0.2...");
+            db.changeVersion('0.1', '0.2', function(tx) {
+                tx.executeSql('ALTER TABLE commands ADD COLUMN linesMax INTEGER NOT NULL DEFAULT 100');
+                tx.executeSql('ALTER TABLE commands ADD COLUMN runIn TEXT NOT NULL DEFAULT "InsideApp"');
+            });
+            initModelsFromDB();
+        }
+        else if(db.version === "0.2")
+        {
+            //up to date and necessary tables exists
+            console.log("Database up to date and ok...")
+            initModelsFromDB();
+        }
+        else
+        {
+            console.log("Got version " + db.version + " for the db...");
+
+            console.log("database didn't exists, create it and tables");
+            db.changeVersion('', '0.2', function(tx)
+            {
+                tx.executeSql('CREATE TABLE IF NOT EXISTS commands('
+                              + 'id INTEGER PRIMARY KEY AUTOINCREMENT,'
+                              + 'name TEXT NOT NULL UNIQUE,'
+                              + 'type TEXT NOT NULL DEFAULT "SingleLiner",'
+                              + 'createdOn INTEGER NOT NULL,'
+                              + 'lastRunOn INTEGER NOT NULL,'
+                              + 'runCount INTEGER NOT NULL,'
+                              + 'isInDatabase BOOLEAN NOT NULL,'
+                              + 'content TEXT NOT NULL,' //needs to be json compliant string:
+                              //{content:"cp $1 $2",params:[{param1},{param2}, ...]}
+                              //params have form of {hint: "source file"}
+                              + 'runIn TEXT NOT NULL DEFAULT "InsideApp",'
+                              + 'linesMax INTEGER NOT NULL DEFAULT 100'
+                              + ')');
+            });
+        }
     }
 }

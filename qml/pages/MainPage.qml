@@ -26,9 +26,9 @@ Page {
 
         PullDownMenu {
             MenuItem {
-                text: qsTr("About")
+                text: qsTr("Settings / About")
                 onClicked: {
-                    pageStack.push(Qt.resolvedUrl("InfoPage.qml"))
+                    pageStack.push(Qt.resolvedUrl("GlobalSettingsPage.qml"))
                 }
             }
             MenuItem {
@@ -109,7 +109,7 @@ Page {
                 Keys.onReturnPressed: {
 
                     routineLib.createStoredCommand(quickCommand.text, quickCommand.text,
-                                                "SingleLiner", runnerChooser.currentItem.value);
+                                                "SingleLiner", runnerChooser.currentItem.value, 100);
 
                     quickCommand.text = "";
                 }

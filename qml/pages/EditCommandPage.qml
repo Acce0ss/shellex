@@ -30,8 +30,15 @@ Dialog {
             }
 
             TextField {
+                id: nameField
+                width: parent.width
+                label: qsTr("Entry name (unique)")
+            }
+
+            TextField {
                 id: editField
                 width: parent.width
+                label: qsTr("Command to run")
             }
 
             ComboBox {
@@ -83,7 +90,7 @@ Dialog {
     onAccepted: {
         if(editAsNew === true)
         {
-            routineLib.createStoredCommand(editField.text, editField.text,
+            routineLib.createStoredCommand(nameField.text, editField.text,
                                            "SingleLiner", runnerChooser.currentItem.value,
                                            command.output.linesMax);
 
@@ -91,7 +98,7 @@ Dialog {
         else
         {
             root.command.content = editField.text;
-            root.command.name = editField.text;
+            root.command.name = nameField.text;
             root.command.runIn = runnerChooser.currentItem.value;
             commandsStore.updateCommand(root.command);
 
@@ -99,6 +106,7 @@ Dialog {
     }
 
     Component.onCompleted: {
+        nameField.text = root.command.content;
         editField.text = root.command.content;
     }
 }

@@ -29,6 +29,10 @@ Dialog {
             }
 
             TextField {
+                id: nameField
+                width: parent.width
+            }
+            TextField {
                 id: editField
                 width: parent.width
             }
@@ -40,7 +44,7 @@ Dialog {
     onAccepted: {
         if(editAsNew === true)
         {
-            var newObj = {name: editField.text, content: editField.text,
+            var newObj = {name: nameField.text, content: editField.text,
                 createdOn: new Date().getTime()/1000, lastRunOn: new Date().getTime()/1000,
                 type: "SingleLiner"};
 
@@ -64,7 +68,7 @@ Dialog {
         else
         {
             root.command.content = editField.text;
-            root.command.name = editField.text;
+            root.command.name = nameField.text;
             commandStore.updateCommand(root.command);
             if(root.modeller.sortType === ShellExecutor.ByName ||
                     root.modeller.sortType === ShellExecutor.ByNameReverse)

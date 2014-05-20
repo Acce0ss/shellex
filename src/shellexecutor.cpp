@@ -39,6 +39,7 @@ ShellExecutor::~ShellExecutor()
 {
     this->stopAllCommands();
 
+    qDebug() << "ShellExecutor dying";
 }
 
 
@@ -82,7 +83,7 @@ void ShellExecutor::initFromArray(QVariantList array)
         m_commands->insert(
 
                         new ShellCommand(
-                            this, name, ShellCommand::SingleLiner, name
+                            NULL, name, ShellCommand::SingleLiner, name
                             )
                     );
     }

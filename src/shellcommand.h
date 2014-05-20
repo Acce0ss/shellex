@@ -97,6 +97,8 @@ public:
 
     Q_INVOKABLE QJsonObject getAsJSONObject();
     Q_INVOKABLE void startDetached(Executor runner);
+    Q_INVOKABLE void sendInputLine(QString input);
+    Q_INVOKABLE void sendInputChar(QString input);
 
 signals:
 

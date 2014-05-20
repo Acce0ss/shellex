@@ -253,6 +253,24 @@ void ShellCommand::startDetached(Executor runner)
     emit runCountChanged();
 }
 
+void ShellCommand::sendInputLine(QString input)
+{
+    if(m_process != NULL)
+    {
+        m_process->write(input.append('\n').toLocal8Bit());
+    }
+}
+
+void ShellCommand::sendInputChar(QString input)
+{
+    if(m_process != NULL)
+    {
+        m_process->write(input.toLocal8Bit());
+    }
+
+
+}
+
 bool ShellCommand::startProcess(Executor runner)
 {
     if(m_process == NULL)
@@ -332,15 +350,20 @@ void ShellCommand::stopProcess()
 {
     if(m_process != NULL)
     {
-        Q_PID pid = m_process->pid();
+        if(this->isRunning())
+        {
+            Q_PID pid = m_process->pid();
 
-        QStringList params;
-        params << "-P";
-        params << QString::number(pid);
+            QStringList params;
+            params << "-P";
+            params << QString::number(pid);
 
-        QProcess::startDetached("pkill", params );
+            qDebug() << params;
 
-        m_process->close();
+            QProcess::startDetached("pkill", params );
+
+            m_process->close();
+        }
     }
     else
     {
@@ -651,6 +674,7 @@ ShellCommand::~ShellCommand()
 //    {
 //        m_output->deleteLater();
 //    }
+    qDebug() << "ShellCommand " << m_name << " dying";
 
 }
 
