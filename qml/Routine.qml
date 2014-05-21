@@ -5,7 +5,7 @@ import harbour.shellex 1.0
 QtObject {
     id: root
 
-    function createStoredCommand(name, content, type, runnerType, linesMax) {
+    function createStoredCommand(name, content, type, runnerType, linesMax, runOnCreate) {
 
         var existing = sheller.getCommandNamed(name);
 
@@ -33,10 +33,12 @@ QtObject {
             if(created !== null)
             {
 
-                created.startProcess(runnerType);
+                if(runOnCreate)
+                {
+                    created.startProcess(runnerType);
 
-                openOutputPage(created, runnerType);
-
+                    openOutputPage(created, runnerType);
+                }
             }
             else
             {
@@ -64,7 +66,8 @@ QtObject {
         //if ran in Fingerterm, no need for outputpage
         if(run_in === ShellCommand.InsideApp)
         {
-            if(pageStack.currentPage.objectName == 'EditCommandPage')
+            if(pageStack.currentPage.objectName == 'EditCommandPage' ||
+                    pageStack.currentPage.objectName == 'CreateCommandPage' )
             {
                 pageStack.replace(Qt.resolvedUrl("pages/ProcessOutputPage.qml"),
                                   {command: command, storageReference: commandsStore},

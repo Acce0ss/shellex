@@ -52,9 +52,12 @@ Page {
                 }
             }
 
-//            MenuItem {
-//                text: "New Script"
-//            }
+            MenuItem {
+                text: qsTr("New command")
+                onClicked: {
+                    pageStack.push(Qt.resolvedUrl("CreateCommandPage.qml"), {modeller: root.shell});
+                }
+            }
         }
 
         Column {
@@ -109,7 +112,7 @@ Page {
                 Keys.onReturnPressed: {
 
                     routineLib.createStoredCommand(quickCommand.text, quickCommand.text,
-                                                "SingleLiner", runnerChooser.currentItem.value, 100);
+                                                "SingleLiner", runnerChooser.currentItem.value, 100, true);
 
                     quickCommand.text = "";
                 }

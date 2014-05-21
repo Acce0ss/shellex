@@ -30,13 +30,12 @@ OTHER_FILES += qml/harbour-shellex.qml \
     qml/pages/SortPage.qml \
     qml/pages/ProcessOutputPage.qml \
     qml/images/running.png \
-    qml/pages/CreateScriptPage.qml \
-    qml/pages/EditScriptPage.qml \
     qml/Routine.qml \
     qml/pages/CommandInfoView.qml \
     qml/pages/NumberOfLinesField.qml \
     qml/GlobalSettings.qml \
-    qml/pages/GlobalSettingsPage.qml
+    qml/pages/GlobalSettingsPage.qml \
+    qml/pages/CreateCommandPage.qml
 
 HEADERS += \
     src/shellexecutor.h \

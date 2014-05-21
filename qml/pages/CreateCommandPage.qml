@@ -4,12 +4,9 @@ import harbour.shellex 1.0
 
 Dialog {
     id: root
-    objectName: "EditCommandPage"
+    objectName: "CreateCommandPage"
 
-    property ShellCommand command
     property ShellExecutor modeller
-
-    property bool editAsNew: false
 
     allowedOrientations: Orientation.All
 
@@ -25,10 +22,8 @@ Dialog {
             width: parent.width
 
             DialogHeader {
-                title: root.editAsNew ? qsTr("New command") : qsTr("Edit command")
-                acceptText: root.editAsNew ?
-                                runOnCreateSwitch.checked ? qsTr("Create and run") : qsTr("Create and save")
-                              : qsTr("Save")
+                title: qsTr("New command")
+                acceptText: runOnCreateSwitch.checked ? qsTr("Create and run") : qsTr("Create and save")
             }
 
             TextField {
@@ -52,19 +47,6 @@ Dialog {
 
                 label: qsTr("Run this command")
 
-
-                Component.onCompleted: {
-                    var currentRunner = root.command.runIn;
-                    if(currentRunner === ShellCommand.Fingerterm)
-                    {
-                        currentIndex = 1;
-                    }
-                    else if(currentRunner === ShellCommand.InsideApp)
-                    {
-                        currentIndex = 0;
-                    }
-                }
-
                 menu: ContextMenu {
 
                     MenuItem{
@@ -87,13 +69,30 @@ Dialog {
                     }
 
                 }
-
             }
+
             TextSwitch {
-                visible: root.editAsNew
                 id: runOnCreateSwitch
                 text: qsTr("Run on create")
                 checked: true
+            }
+
+            Separator {
+                width: parent.width-2*Theme.paddingLarge
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
+
+            Label {
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                wrapMode: Text.WordWrap
+
+                horizontalAlignment: Text.AlignHCenter
+
+                text: qsTr("Parameter setup coming soon...")
+                color: Theme.highlightColor
+                font.pixelSize: Theme.fontSizeLarge
+
             }
 
         }
@@ -101,25 +100,12 @@ Dialog {
     }
 
     onAccepted: {
-        if(editAsNew === true)
-        {
-            routineLib.createStoredCommand(nameField.text, editField.text,
-                                           "SingleLiner", runnerChooser.currentItem.value,
-                                           command.output.linesMax, runOnCreateSwitch.checked);
 
-        }
-        else
-        {
-            root.command.content = editField.text;
-            root.command.name = nameField.text;
-            root.command.runIn = runnerChooser.currentItem.value;
-            commandsStore.updateCommand(root.command);
+        routineLib.createStoredCommand(nameField.text, editField.text,
+                                       "SingleLiner", runnerChooser.currentItem.value,
+                                       100, runOnCreateSwitch.checked);
 
-        }
     }
 
-    Component.onCompleted: {
-        nameField.text = root.command.name;
-        editField.text = root.command.content;
-    }
 }
+
