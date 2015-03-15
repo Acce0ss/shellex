@@ -3,6 +3,8 @@ import Sailfish.Silica 1.0
 
 import harbour.shellex 1.0
 
+import "../components"
+
 Page {
     id: root
 

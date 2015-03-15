@@ -7,6 +7,7 @@ Column {
   width: parent.width
 
   property alias parameters: parametersModel.parameters
+  property alias count: parametersModel.count
 
   Repeater {
     anchors.horizontalCenter: parent.horizontalCenter

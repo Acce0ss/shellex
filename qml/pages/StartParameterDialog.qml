@@ -6,9 +6,11 @@ import "../components"
 
 Dialog {
   id: root
-  objectName: "CreateCommandPage"
+  objectName: "StartParameterDialog"
 
   property ShellCommand command
+  property bool detachedRun: false
+
 
   allowedOrientations: Orientation.All
 
@@ -37,13 +39,25 @@ Dialog {
     }
 
   }
+  property bool noOutputPage: detachedRun ||
+                              root.command.runIn === ShellCommand.Fingerterm
+  acceptDestination: noOutputPage ? mainPage
+                                  : Qt.resolvedUrl("ProcessOutputPage.qml")
+  acceptDestinationAction: noOutputPage ? PageStackAction.Pop
+                                        : PageStackAction.Replace
+  acceptDestinationProperties: noOutputPage ? {}
+                                            : {command: command, storageReference: commandsStore}
 
   onAccepted: {
 
-    routineLib.openOutputPage(root.command, ShellCommand.UseSavedRunner);
-
-    root.command.startProcess(ShellCommand.UseSavedRunner, inputs.parametersOutput);
-
+    if(root.detachedRun)
+    {
+      root.command.startDetached(ShellCommand.UseSavedRunner, inputs.parametersOutput);
+    }
+    else
+    {
+      root.command.startProcess(ShellCommand.UseSavedRunner, inputs.parametersOutput);
+    }
   }
 
 }

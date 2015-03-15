@@ -5,7 +5,6 @@ import harbour.shellex 1.0
 
 import "../"
 
-
 ListItem {
 
   id: root
@@ -20,29 +19,7 @@ ListItem {
   CommandInfoView { }
 
   onClicked: {
-
-    if(model.display.hasParameters)
-    {
-      if(model.display.isRunning === false)
-      {
-        pageStack.push(Qt.resolvedUrl("StartParameterDialog.qml"), {command: model.display})
-      }
-      else
-      {
-        routineLib.openOutputPage(model.display, ShellCommand.UseSavedRunner);
-      }
-    }
-    else
-    {
-
-      routineLib.openOutputPage(model.display, ShellCommand.UseSavedRunner);
-
-      if(model.display.isRunning === false)
-      {
-        model.display.startProcess(ShellCommand.UseSavedRunner);
-      }
-    }
-
+    routineLib.startCommand(model.display);
   }
 
   onPressedChanged: {
@@ -60,7 +37,15 @@ ListItem {
     MenuItem {
       text: qsTr("Run detached")
       onClicked: {
-        model.display.startDetached(ShellCommand.UseSavedRunner);
+        if(model.display.hasParameters)
+        {
+          pageStack.push(Qt.resolvedUrl("../pages/StartParameterDialog.qml"),
+                         {command: model.display, detachedRun: true})
+        }
+        else
+        {
+          model.display.startDetached(ShellCommand.UseSavedRunner);
+        }
       }
       Label {
         visible: parent.enabled
@@ -79,7 +64,7 @@ ListItem {
       onClicked: {
         if(model.display.type === ShellCommand.SingleLiner)
         {
-          pageStack.push(Qt.resolvedUrl("EditCommandPage.qml"), {command: model.display,
+          pageStack.push(Qt.resolvedUrl("../pages/EditCommandPage.qml"), {command: model.display,
                            modeller: root.executor,
                            editAsNew: false});
         }
@@ -90,7 +75,7 @@ ListItem {
       onClicked: {
         if(model.display.type === ShellCommand.SingleLiner)
         {
-          pageStack.push(Qt.resolvedUrl("EditCommandPage.qml"), {command: model.display,
+          pageStack.push(Qt.resolvedUrl("../pages/EditCommandPage.qml"), {command: model.display,
                            modeller: root.executor,
                            editAsNew: true});
         }

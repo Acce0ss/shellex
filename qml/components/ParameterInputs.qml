@@ -58,9 +58,9 @@ Column {
 
     function updateParameterValues(index, value)
     {
-      outputParams[index] = value;
+      outputParams[index] = value.toString();
     }
 
-    Component.onCompleted: updateAll
+    Component.onCompleted: updateAll()
   }
 }

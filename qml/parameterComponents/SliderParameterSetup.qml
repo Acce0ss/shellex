@@ -54,6 +54,8 @@ Column {
     }
     label: qsTr("Minimum value")
     placeholderText: label
+
+    inputMethodHints: Qt.ImhDigitsOnly
   }
   TextField {
 
@@ -64,6 +66,7 @@ Column {
     validator: setupValueValidator
     label: qsTr("Maximum value")
     placeholderText: label
+    inputMethodHints: Qt.ImhDigitsOnly
   }
   TextField {
 
@@ -74,6 +77,7 @@ Column {
     validator: setupValueValidator
     label: qsTr("Step size")
     placeholderText: label
+    inputMethodHints: Qt.ImhDigitsOnly
   }
   TextField {
 
@@ -84,6 +88,7 @@ Column {
     validator: setupValueValidator
     label: qsTr("Default value")
     placeholderText: label
+    inputMethodHints: Qt.ImhDigitsOnly
   }
 
   TextField {
@@ -100,5 +105,4 @@ Column {
     label: qsTr("Parameter description")
     placeholderText: label
   }
-
 }

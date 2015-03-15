@@ -103,6 +103,15 @@ Dialog {
 
   }
 
+  property bool needOutputPage: runOnCreateSwitch.checked &&
+                                runnerChooser.currentItem.value === ShellCommand.InsideApp
+
+  acceptDestination: needOutputPage ? ( parametersSetup.count ? Qt.resolvedUrl("ProcessOutputPage.qml")
+                                                              : Qt.resolvedUrl("ProcessOutputPage.qml"))
+                                    : mainPage
+  acceptDestinationAction: needOutputPage ? PageStackAction.Replace
+                                          : PageStackAction.Pop
+
   onAccepted: {
 
     var scriptContent = JSON.stringify({script: editField.text, parameters: parametersSetup.parameters});
