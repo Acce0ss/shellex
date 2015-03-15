@@ -110,7 +110,7 @@ Dialog {
         }
         else
         {
-            root.command.content = editField.text;
+            root.command.content = JSON.stringify({script: editField.text});
             root.command.name = nameField.text;
             root.command.runIn = runnerChooser.currentItem.value;
             commandsStore.updateCommand(root.command);
@@ -120,6 +120,6 @@ Dialog {
 
     Component.onCompleted: {
         nameField.text = root.command.name;
-        editField.text = root.command.content;
+        editField.text = JSON.parse(root.command.content).script;
     }
 }
