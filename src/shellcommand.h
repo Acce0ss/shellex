@@ -25,6 +25,7 @@ class ShellCommand : public QObject
     Q_PROPERTY(int runCount READ runCount NOTIFY runCountChanged)
     Q_PROPERTY(bool updatedOnThisStart READ updatedOnThisStart WRITE setUpdatedOnThisStart NOTIFY updatedOnThisStartChanged)
 
+    Q_PROPERTY(bool hasParameters READ hasParameters)
     Q_PROPERTY(CommandOutputModel* output READ output NOTIFY outputChanged)
 
     Q_PROPERTY(bool isRunning READ isRunning NOTIFY isRunningChanged)
@@ -84,6 +85,8 @@ public:
     unsigned int runCount() const;
     void setRunCount(unsigned int count);
 
+    bool hasParameters() const;
+
     CommandOutputModel* output();
 
     bool isRunning() const;
@@ -96,7 +99,7 @@ public:
     void initProcess();
 
     Q_INVOKABLE QJsonObject getAsJSONObject();
-    Q_INVOKABLE void startDetached(Executor runner);
+    Q_INVOKABLE void startDetached(Executor runner,  QJsonArray parameters = QJsonArray());
     Q_INVOKABLE void sendInputLine(QString input);
     Q_INVOKABLE void sendInputChar(QString input);
 
@@ -118,7 +121,7 @@ signals:
     void outputChanged();
 public slots:
 
-    bool startProcess(Executor runner);
+    bool startProcess(Executor runner,  QJsonArray parameters = QJsonArray());
 
     void stopProcess();
 
@@ -158,6 +161,8 @@ private:
     bool m_updated_on_this_start;
 
     int m_lines_max;
+
+    QString m_script_path;
 };
 
 #endif // SHELLCOMMAND_H

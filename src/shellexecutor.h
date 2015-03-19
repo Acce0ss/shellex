@@ -35,7 +35,6 @@ signals:
     void fingertermInstalledChanged();
 public slots:
 
-    void initFromArray(QVariantList array);
     void initFromJSON(QString jsonString);
     void initFromJSONArray(QJsonArray jsonArray);
 

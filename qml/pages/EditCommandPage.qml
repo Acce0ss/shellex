@@ -2,6 +2,8 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 import harbour.shellex 1.0
 
+import "../components"
+
 Dialog {
   id: root
   objectName: "EditCommandPage"
@@ -96,9 +98,17 @@ Dialog {
           checked: true
         }
 
+        ParameterSetup {
+          id: parametersSetup
+
+          parameters: JSON.parse(root.command.content).parameters
+        }
+
       }
 
     }
+
+    canAccept: parametersSetup.acceptableParameters
 
     property bool needOutputPage: root.editAsNew &&
                                   runOnCreateSwitch.checked &&
@@ -111,16 +121,19 @@ Dialog {
                                             : PageStackAction.Pop
 
   onAccepted: {
+    var scriptContent = JSON.stringify({script: editField.text, parameters: parametersSetup.parameters});
+
     if(editAsNew === true)
     {
-      routineLib.createStoredCommand(nameField.text, editField.text,
+      routineLib.createStoredCommand(nameField.text, scriptContent,
                                      "SingleLiner", runnerChooser.currentItem.value,
                                      command.output.linesMax, runOnCreateSwitch.checked);
 
     }
     else
     {
-      root.command.content = JSON.stringify({script: editField.text});
+
+      root.command.content = scriptContent;
       root.command.name = nameField.text;
       root.command.runIn = runnerChooser.currentItem.value;
       commandsStore.updateCommand(root.command);

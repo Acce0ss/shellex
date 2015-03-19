@@ -9,6 +9,9 @@ Column {
 
   property string pluginDescription: qsTr("Parameter for general strings")
 
+  property bool acceptableInputs: defaultValueInput.acceptableInput &&
+                                  parameterDescriptionInput.acceptableInput
+
   property var detailsObject: {"defaultValue": defaultValueInput.text,
                                "description": parameterDescriptionInput.text}
 

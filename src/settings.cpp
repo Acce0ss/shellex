@@ -8,18 +8,11 @@ Settings::Settings(QObject *parent) :
     QObject(parent), _setup(NULL)
 {
 
-//    this->setCurrentCity( this->_setup.value("currentCity", "").toString());
-//    this->setTempUnit( this->_setup.value("tempUnit", QString::fromUtf8("°C")).toString());
-//    this->setRefreshRate( this->_setup.value("refreshRate", 1000*60*30).toInt());
-//    this->setAutoRefreshOn( this->_setup.value("autoRefreshOn", true).toBool());
 }
 
 void Settings::storeSettings()
 {
-//    this->_setup.setValue("currentCity", this->_current_city);
-//    this->_setup.setValue("tempUnit", this->_temp_unit);
-//    this->_setup.setValue("refreshRate",this->_refresh_rate);
-//    this->_setup.setValue("autoRefreshOn",this->_auto_refresh_on);
+
     if(this->_setup)
     {
         this->_setup->sync();

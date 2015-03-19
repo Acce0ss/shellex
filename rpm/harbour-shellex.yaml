@@ -1,9 +1,9 @@
 Name: harbour-shellex
 Summary: An application that offers shortcuts command-line
-Version: 0.2
+Version: 0.4
 Release: 1
 Group: Qt/Qt
-URL: http://example.org/
+URL: http://github.com/Acce0ss/ShellEx
 License: LICENSE
 Sources:
 - '%{name}-%{version}.tar.bz2'

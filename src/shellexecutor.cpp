@@ -73,22 +73,6 @@ bool ShellExecutor::fingertermInstalled()
     return m_fingerterm_installed;
 }
 
-
-//legacy method
-void ShellExecutor::initFromArray(QVariantList array)
-{
-    for(int i = 0; i < array.length(); i++)
-    {
-        QString name = array.at(i).toString();
-        m_commands->insert(
-
-                        new ShellCommand(
-                            NULL, name, ShellCommand::SingleLiner, name
-                            )
-                    );
-    }
-}
-
 void ShellExecutor::initFromJSON(QString jsonString)
 {
 

@@ -37,7 +37,11 @@ Page {
           width: parent.width - 2*Theme.paddingSmall
           spacing: Theme.paddingSmall
 
-          SectionHeader {
+          Label {
+            id: pluginNameLabel
+            font.pixelSize: Theme.fontSizeLarge
+            wrapMode: Text.WordWrap
+            color: typeOption.highlighted ? Theme.highlightColor : Theme.secondaryHighlightColor
             text: model.display
           }
           Label {

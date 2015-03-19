@@ -103,6 +103,8 @@ Dialog {
 
   }
 
+  canAccept: parametersSetup.acceptableParameters
+
   property bool needOutputPage: runOnCreateSwitch.checked &&
                                 runnerChooser.currentItem.value === ShellCommand.InsideApp
 

@@ -8,8 +8,12 @@ Column {
 
   property alias parameters: parametersModel.parameters
   property alias count: parametersModel.count
+  property bool acceptableParameters: _acceptableParameterCount >= count
+
+  property int _acceptableParameterCount: 0
 
   Repeater {
+    id: paramDisplayer
     anchors.horizontalCenter: parent.horizontalCenter
     width: parent.width
     model: parametersModel
@@ -29,7 +33,17 @@ Column {
         Connections {
           target: setupElement.item
           onDetailsObjectChanged: {
-            parametersModel.updateParameterDetails(index, setupElement.item.detailsObject)
+            parametersModel.updateParameterDetails(index, setupElement.item.detailsObject);
+          }
+          onAcceptableInputsChanged: {
+            if(setupElement.item.acceptableInputs)
+            {
+              root._acceptableParameterCount++;
+            }
+            else
+            {
+              root._acceptableParameterCount--;
+            }
           }
         }
 
@@ -75,7 +89,8 @@ Column {
 
     function removeParameter(index)
     {
-
+      parameters.splice(index, 1);
+      remove(index);
     }
 
     function addParameter(paramObj)

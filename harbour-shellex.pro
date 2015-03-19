@@ -15,7 +15,8 @@ SOURCES += src/harbour-shellex.cpp \
     src/shellcommand.cpp \
     src/commandoutputmodel.cpp \
     src/commandsmodel.cpp \
-    src/settings.cpp
+    src/settings.cpp \
+    src/parameterpluginlistmodel.cpp
 
 OTHER_FILES += qml/harbour-shellex.qml \
     qml/cover/CoverPage.qml \
@@ -24,23 +25,32 @@ OTHER_FILES += qml/harbour-shellex.qml \
     harbour-shellex.desktop \
     qml/pages/MainPage.qml \
     qml/CommandsStore.qml \
-    qml/pages/CommandDelegate.qml \
     TODO.txt \
     qml/pages/EditCommandPage.qml \
     qml/pages/SortPage.qml \
     qml/pages/ProcessOutputPage.qml \
     qml/images/running.png \
     qml/Routine.qml \
-    qml/pages/CommandInfoView.qml \
-    qml/pages/NumberOfLinesField.qml \
     qml/GlobalSettings.qml \
     qml/pages/GlobalSettingsPage.qml \
-    qml/pages/CreateCommandPage.qml
+    qml/pages/CreateCommandPage.qml \
+    qml/parameterComponents/StringParameter.qml \
+    qml/parameterComponents/SliderParameter.qml \
+    qml/parameterComponents/SliderParameterSetup.qml \
+    qml/parameterComponents/StringParameterSetup.qml \
+    qml/components/ParameterSetup.qml \
+    qml/pages/ParameterAddPage.qml \
+    qml/pages/StartParameterDialog.qml \
+    qml/components/ParameterInputs.qml \
+    qml/components/CommandDelegate.qml \
+    qml/components/CommandInfoView.qml \
+    qml/components/NumberOfLinesField.qml
 
 HEADERS += \
     src/shellexecutor.h \
     src/shellcommand.h \
     src/commandoutputmodel.h \
     src/commandsmodel.h \
-    src/settings.h
+    src/settings.h \
+    src/parameterpluginlistmodel.h
 

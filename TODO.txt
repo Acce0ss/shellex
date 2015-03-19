@@ -1,4 +1,4 @@
-v.0.1: (current)
+v.0.1:
 
 -Sorting:
     - by name X
@@ -36,30 +36,54 @@ v.0.1: (current)
 v. 0.2:
 
 -database
-    -create schema updating functions for db version upgrade
-    -add settings table with settings(name, type, value, description)
+    -create schema updating functions for db version upgrade x
 
--settings page
+-settings page x
 
 -running a process
-    -bind runner type to each command -> Started implementing, needs testing.
-    -add possibility to adjust process output lines count
+    -bind runner type to each command x
+    -add possibility to adjust process output lines count x
 
 -script functionality
-    -new script -page
-    -edit script -page
-    -edit as new -function
-    -parameter setup
-    -edit with $EDITOR in Fingerterm
+    -new script -page x (integrated with one liners)
+    -edit script -page x (integrated with one liners)
+    -edit as new -function x (integrated with one liners)
+
+v. 0.3: (current)
+
+-general
+    -return to main page from cover x
+
+-script / command functionality
+    -start detached / not as saved option for each command x
+
+v. 0.4:
 
 -script parameters
     -when starting, open a parameter page
     -let user input own parameters or use defaults
 
+-script / command functionality
+    -parameter setup
+        - default parameters
+        - allow optional parameters
+        - validate that all default parameters appear in the command / script
+
+    -clear output on start switch
+    -disable automatic "#!/bin/bash" at the beginning for directly writing other scripting langs
+    -validate that the name is unique
+
+-output
+    -option to show line numbers
 
 roadmap:
 
 v. 0.x
+
+-add settings table with settings(name, type, value, description)
+
+-script editing
+    -edit with $EDITOR in Fingerterm
 
 -integration
     -integrate app functionality into events view as an UI patch

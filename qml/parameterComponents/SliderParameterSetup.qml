@@ -9,6 +9,12 @@ Column {
 
   property string pluginDescription: qsTr("Parameter for numeric values, using a slider")
 
+  property bool acceptableInputs: minValueInput.acceptableInput &&
+                                  maxValueInput.acceptableInput &&
+                                  defaultValueInput.acceptableInput &&
+                                  parameterDescriptionInput.acceptableInput &&
+                                  stepSizeInput.acceptableInput
+
   property var detailsObject: {"minValue": minValueInput.text,
                                "maxValue": maxValueInput.text,
                                "defaultValue": defaultValueInput.text,

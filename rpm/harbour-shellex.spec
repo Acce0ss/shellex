@@ -13,11 +13,11 @@ Name:       harbour-shellex
 %{!?qtc_make:%define qtc_make make}
 %{?qtc_builddir:%define _builddir %qtc_builddir}
 Summary:    An application that offers shortcuts command-line
-Version:    0.2
+Version:    0.4
 Release:    1
 Group:      Qt/Qt
 License:    LICENSE
-URL:        http://example.org/
+URL:        http://github.com/Acce0ss/ShellEx
 Source0:    %{name}-%{version}.tar.bz2
 Source100:  harbour-shellex.yaml
 Requires:   sailfishsilica-qt5 >= 0.10.9
