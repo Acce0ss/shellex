@@ -186,7 +186,7 @@ Item {
         {
           var obj = result.rows.item(i);
 
-          var tempObj = {script: obj.content};
+          var tempObj = {script: obj.content, parameters: []};
 
           tx.executeSql("UPDATE commands SET content=? WHERE id=?",
                         [JSON.stringify(tempObj),

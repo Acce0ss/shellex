@@ -60,18 +60,18 @@ v. 0.3: (current)
 v. 0.4:
 
 -script parameters
-    -when starting, open a parameter page
-    -let user input own parameters or use defaults
+    -when starting, open a parameter page x
+    -let user input own parameters or use defaults x
 
 -script / command functionality
-    -parameter setup
-        - default parameters
+    -parameter setup x
+        - default parameters x
         - allow optional parameters
-        - validate that all default parameters appear in the command / script
+        (- validate that all default parameters appear in the command / script)
 
     -clear output on start switch
-    -disable automatic "#!/bin/bash" at the beginning for directly writing other scripting langs
-    -validate that the name is unique
+    -disable automatic "#!/bin/bash" at the beginning for directly writing other scripting langs x
+    -validate that the name is unique x
 
 -output
     -option to show line numbers

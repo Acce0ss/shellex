@@ -16,7 +16,8 @@ SOURCES += src/harbour-shellex.cpp \
     src/commandoutputmodel.cpp \
     src/commandsmodel.cpp \
     src/settings.cpp \
-    src/parameterpluginlistmodel.cpp
+    src/parameterpluginlistmodel.cpp \
+    src/commandnamevalidator.cpp
 
 OTHER_FILES += qml/harbour-shellex.qml \
     qml/cover/CoverPage.qml \
@@ -52,5 +53,11 @@ HEADERS += \
     src/commandoutputmodel.h \
     src/commandsmodel.h \
     src/settings.h \
-    src/parameterpluginlistmodel.h
+    src/parameterpluginlistmodel.h \
+    src/commandnamevalidator.h
 
+# to disable building translations every time, comment out the
+# following CONFIG line
+CONFIG += sailfishapp_i18n
+CODECFORTR = UTF-8
+TRANSLATIONS += translations/harbour-shellex-fi.ts

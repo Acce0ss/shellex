@@ -16,6 +16,7 @@ class CommandOutputModel : public QAbstractListModel
 public:
     CommandOutputModel(QObject* parent = 0);
 
+    void append(QStringList outputString);
     void append(QString outputString);
 
     QString outputString();

@@ -12,11 +12,11 @@ ListItem {
   property CommandsStore storage
   property ShellExecutor executor
 
-  contentHeight: Theme.itemSizeLarge // two line delegate
+  contentHeight: infoView.height + 2*Theme.paddingSmall
 
   z: 10
 
-  CommandInfoView { }
+  CommandInfoView { id: infoView }
 
   onClicked: {
     routineLib.startCommand(model.display);

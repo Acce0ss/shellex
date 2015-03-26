@@ -16,6 +16,8 @@ Page {
 
     anchors.fill: parent
 
+    ScrollDecorator {}
+
     header: PageHeader {
       title: qsTr("Add parameter")
     }
@@ -41,14 +43,14 @@ Page {
             id: pluginNameLabel
             font.pixelSize: Theme.fontSizeLarge
             wrapMode: Text.WordWrap
-            color: typeOption.highlighted ? Theme.highlightColor : Theme.secondaryHighlightColor
+            color: typeOption.highlighted ? Theme.highlightColor : Theme.primaryColor
             text: model.display
           }
           Label {
             id: pluginDescriptionLabel
             width: parent.width
             wrapMode: Text.WordWrap
-            color: typeOption.highlighted ? Theme.highlightColor : Theme.primaryColor
+            color: typeOption.highlighted ? Theme.highlightColor : Theme.secondaryHighlightColor
           }
           Loader {
             id: setupDescriptionLoader

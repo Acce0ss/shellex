@@ -444,10 +444,9 @@ void ShellCommand::readStandardOutput()
 
     if(m_output != NULL)
     {
-      for(int i=0; i < outputs.length(); i++)
-      {
-        m_output->append(outputs.at(i));
-      }
+
+      m_output->append(outputs);
+
     }
     else
     {
@@ -472,10 +471,9 @@ void ShellCommand::readStandardError()
         .split(QRegExp("[\r\n]"),QString::SkipEmptyParts);
     if(m_output != NULL)
     {
-      for(int i=0; i < outputs.length(); i++)
-      {
-        m_output->append(outputs.at(i));
-      }
+
+      m_output->append(outputs);
+
     }
     else
     {

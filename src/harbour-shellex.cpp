@@ -8,6 +8,7 @@
 #include <QQuickView>
 #include <QGuiApplication>
 #include <QDir>
+#include <QTranslator>
 
 #include "shellexecutor.h"
 #include "shellcommand.h"
@@ -15,6 +16,7 @@
 #include "commandoutputmodel.h"
 #include "commandsmodel.h"
 #include "parameterpluginlistmodel.h"
+#include "commandnamevalidator.h"
 
 int main(int argc, char *argv[])
 {
@@ -45,12 +47,20 @@ int main(int argc, char *argv[])
 
   }
 
+  qmlRegisterType<CommandNameValidator>("harbour.shellex", 1, 0, "CommandNameValidator");
   qmlRegisterType<Settings>("harbour.shellex", 1, 0, "Settings");
   qmlRegisterType<CommandOutputModel>("harbour.shellex", 1, 0, "CommandOutputModel");
   qmlRegisterType<CommandsModel>("harbour.shellex", 1, 0, "CommandsModel");
   qmlRegisterType<ParameterPluginListModel>("harbour.shellex", 1, 0, "AvailableParameterModel");
   qmlRegisterType<ShellExecutor>("harbour.shellex", 1, 0, "ShellExecutor");
   qmlRegisterType<ShellCommand>("harbour.shellex", 1, 0, "ShellCommand");
+
+  QTranslator appTranslator;
+      appTranslator.load("harbour-shellex-" + QLocale::system().name(),
+                         SailfishApp::pathTo("translations").toLocalFile());
+      app->installTranslator(&appTranslator);
+
+      qDebug() << SailfishApp::pathTo("translations").toString();
 
   QScopedPointer<QQuickView> viewer(SailfishApp::createView());
 

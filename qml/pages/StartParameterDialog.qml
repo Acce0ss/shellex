@@ -20,6 +20,8 @@ Dialog {
 
     contentHeight: content.height
 
+    ScrollDecorator {}
+
     Column {
       id: content
 
@@ -33,7 +35,8 @@ Dialog {
       ParameterInputs {
         id: inputs
         width: parent.width - 2*Theme.paddingSmall
-        parametersInput: JSON.parse(root.command.content).parameters
+        parametersInput: JSON.parse(root.command.content).hasOwnProperty('parameters') ?
+                      JSON.parse(root.command.content).parameters : []
       }
 
     }
@@ -45,11 +48,9 @@ Dialog {
                                   : Qt.resolvedUrl("ProcessOutputPage.qml")
   acceptDestinationAction: noOutputPage ? PageStackAction.Pop
                                         : PageStackAction.Replace
-  acceptDestinationProperties: noOutputPage ? {}
-                                            : {command: command, storageReference: commandsStore}
+  acceptDestinationProperties: noOutputPage ? {} : {command: command, storageReference: commandsStore}
 
   onAccepted: {
-
     if(root.detachedRun)
     {
       root.command.startDetached(ShellCommand.UseSavedRunner, inputs.parametersOutput);
@@ -59,5 +60,4 @@ Dialog {
       root.command.startProcess(ShellCommand.UseSavedRunner, inputs.parametersOutput);
     }
   }
-
 }

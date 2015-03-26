@@ -21,6 +21,8 @@ Dialog {
 
     contentHeight: content.height
 
+    ScrollDecorator {}
+
     Column {
       id: content
 
@@ -36,8 +38,13 @@ Dialog {
         TextField {
           id: nameField
           width: parent.width
-          label: qsTr("Entry name (unique)")
+          label: acceptableInput ? qsTr("Entry name (unique)") : qsTr("Name not unique")
           placeholderText: label
+
+          validator: CommandNameValidator {
+            command: root.command
+            model: root.modeller.commandsModel
+          }
         }
 
         TextArea {
@@ -100,15 +107,15 @@ Dialog {
 
         ParameterSetup {
           id: parametersSetup
-
-          parameters: JSON.parse(root.command.content).parameters
+          parameters: JSON.parse(root.command.content).hasOwnProperty('parameters') ?
+                        JSON.parse(root.command.content).parameters : []
         }
 
       }
 
     }
 
-    canAccept: parametersSetup.acceptableParameters
+    canAccept: parametersSetup.acceptableParameters && nameField.acceptableInput
 
     property bool needOutputPage: root.editAsNew &&
                                   runOnCreateSwitch.checked &&
@@ -123,6 +130,7 @@ Dialog {
   onAccepted: {
     var scriptContent = JSON.stringify({script: editField.text, parameters: parametersSetup.parameters});
 
+    console.log(scriptContent)
     if(editAsNew === true)
     {
       routineLib.createStoredCommand(nameField.text, scriptContent,
@@ -143,6 +151,9 @@ Dialog {
 
   Component.onCompleted: {
     nameField.text = root.command.name;
-    editField.text = JSON.parse(root.command.content).script;
+    var content = JSON.parse(root.command.content);
+    editField.text = content.script;
+    console.log(content.hasOwnProperty('parameters'))
+
   }
 }

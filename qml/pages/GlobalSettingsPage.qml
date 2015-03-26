@@ -13,6 +13,8 @@ Dialog {
 
         contentHeight: content.height
 
+        ScrollDecorator {}
+
         Column {
             id: content
 

@@ -18,6 +18,8 @@ Dialog {
 
     contentHeight: content.height
 
+    ScrollDecorator {}
+
     Column {
       id: content
 
@@ -35,8 +37,12 @@ Dialog {
       TextField {
         id: nameField
         width: parent.width
-        label: qsTr("Entry name (unique)")
+        label: acceptableInput ? qsTr("Entry name (unique)") : qsTr("Name not unique")
         placeholderText: label
+
+        validator: CommandNameValidator {
+          model: root.modeller.commandsModel
+        }
       }
 
       TextArea {
@@ -103,7 +109,7 @@ Dialog {
 
   }
 
-  canAccept: parametersSetup.acceptableParameters
+  canAccept: parametersSetup.acceptableParameters && nameField.acceptableInput
 
   property bool needOutputPage: runOnCreateSwitch.checked &&
                                 runnerChooser.currentItem.value === ShellCommand.InsideApp
