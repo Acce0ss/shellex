@@ -113,7 +113,8 @@ Page {
 
                 Keys.onReturnPressed: {
 
-                    routineLib.createStoredCommand(quickCommand.text, quickCommand.text,
+                  var jsonObj = JSON.stringify({script: quickCommand.text, params: []});
+                    routineLib.createStoredCommand(quickCommand.text, jsonObj,
                                                 "SingleLiner", runnerChooser.currentItem.value, 100, true);
 
                     quickCommand.text = "";

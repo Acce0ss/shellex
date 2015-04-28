@@ -45,7 +45,9 @@ OTHER_FILES += qml/harbour-shellex.qml \
     qml/components/ParameterInputs.qml \
     qml/components/CommandDelegate.qml \
     qml/components/CommandInfoView.qml \
-    qml/components/NumberOfLinesField.qml
+    qml/components/NumberOfLinesField.qml \
+    qml/parameterComponents/ComboBoxParameter.qml \
+    qml/parameterComponents/ComboBoxParameterSetup.qml
 
 HEADERS += \
     src/shellexecutor.h \

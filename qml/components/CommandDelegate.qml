@@ -16,7 +16,10 @@ ListItem {
 
   z: 10
 
-  CommandInfoView { id: infoView }
+  CommandInfoView {
+    id: infoView
+    highlighted: root.highlighted
+  }
 
   onClicked: {
     routineLib.startCommand(model.display);

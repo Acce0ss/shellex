@@ -16,6 +16,7 @@ Slider {
     root.label = detailsObject.description;
   }
   property real parameterValue: value  //Need to be provided by this name!
+  property bool acceptableInputs: true
 
   valueText: value
   width: parent.width

@@ -5,51 +5,30 @@ import harbour.shellex 1.0
 Item {
   id: root
 
+  property bool highlighted: false
+
   anchors.horizontalCenter: parent.horizontalCenter
 
-  height: commandFlick.height + infoLabels.height
+  height: desc.height + infoLabels.height
   width: parent.width-2*Theme.paddingLarge
 
   state: (orientation === Orientation.Portrait || orientation === Orientation.PortraitInverted )
          ? "portrait"
          : "landscape"
 
-  Flickable {
-    id: commandFlick
-    height: desc.height+Theme.paddingSmall
-    width: parent.width
-
-    anchors.left: parent.left
+  Label {
+    id: desc
     anchors.top: parent.top
 
-    pressDelay: 0
-
-    contentWidth: desc.width
-    flickableDirection: Flickable.HorizontalFlick
-
-    clip: true
-
-    z: 1
-
-
-    Label {
-      id: desc
-
-      anchors.verticalCenter: parent.verticalCenter
-
-
-      height: paintedHeight
-      text: model.display.name
-      color: root.highlighted ? Theme.highlightColor : Theme.primaryColor
-      truncationMode: TruncationMode.Fade
-    }
-
+    width: parent.width
+    text: model.display.name
+    color: root.highlighted ? Theme.highlightColor : Theme.primaryColor
+    truncationMode: TruncationMode.Elide
   }
-
 
   Item {
     id: infoLabels
-    anchors.top: commandFlick.bottom
+    anchors.top: desc.bottom
     anchors.left: parent.left
     height: 2*dateLastRunLabel.paintedHeight + Theme.paddingSmall
     width: parent.width

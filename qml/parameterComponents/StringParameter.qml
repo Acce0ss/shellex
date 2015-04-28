@@ -16,7 +16,7 @@ TextField {
 
   }
   property string parameterValue: text  //Need to be provided by this name!
-
+  property bool acceptableInputs: acceptableInput
 
   width: parent.width
 

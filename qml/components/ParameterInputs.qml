@@ -9,6 +9,11 @@ Column {
   property alias parametersInput: parametersModel.parameters
   property alias parametersOutput: parametersModel.outputParams
 
+  property alias count: parametersModel.count
+  property bool acceptableInputs: _acceptableInputCount >= count
+
+  property int _acceptableInputCount: 0
+
   Repeater {
     anchors.horizontalCenter: parent.horizontalCenter
     width: parent.width
@@ -31,10 +36,21 @@ Column {
           onParameterValueChanged: {
             parametersModel.updateParameterValues(index, inputElement.item.parameterValue)
           }
+          onAcceptableInputsChanged: {
+            if(inputElement.item.acceptableInputs)
+            {
+              root._acceptableInputCount++;
+            }
+            else
+            {
+              root._acceptableInputCount--;
+            }
+          }
         }
 
         onLoaded: {
           inputElement.item.initializeParameter(dataObj.details);
+          inputElement.item.acceptableInputsChanged();
         }
       }
     }

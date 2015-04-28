@@ -77,14 +77,13 @@ Column {
       clear()
       for (var i=0; i<parameters.length; i++) {
 
-          append({"dataObj": parameters[i]})
+        append({"dataObj": parameters[i]})
       }
     }
 
     function updateParameterDetails(index, detailsObj)
     {
       parameters[index].details = detailsObj;
-      console.log("Updated details of param " + index + " to " + JSON.stringify(parameters[index].details))
     }
 
     function removeParameter(index)

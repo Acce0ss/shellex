@@ -42,6 +42,9 @@ Dialog {
     }
 
   }
+
+  canAccept: inputs.acceptableInputs
+
   property bool noOutputPage: detachedRun ||
                               root.command.runIn === ShellCommand.Fingerterm
   acceptDestination: noOutputPage ? mainPage

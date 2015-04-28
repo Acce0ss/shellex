@@ -2,39 +2,62 @@
 <!DOCTYPE TS>
 <TS version="2.1">
 <context>
+    <name>ComboBoxParameterSetup</name>
+    <message>
+        <location filename="../qml/parameterComponents/ComboBoxParameterSetup.qml" line="10"/>
+        <source>Parameter for set of options. Preferable to use less than 6 values.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/parameterComponents/ComboBoxParameterSetup.qml" line="45"/>
+        <source>Values in format value1; value2 etc.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/parameterComponents/ComboBoxParameterSetup.qml" line="72"/>
+        <source>index of default value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/parameterComponents/ComboBoxParameterSetup.qml" line="87"/>
+        <source>Parameter description</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>CommandDelegate</name>
     <message>
-        <location filename="../qml/components/CommandDelegate.qml" line="38"/>
+        <location filename="../qml/components/CommandDelegate.qml" line="41"/>
         <source>Run detached</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/components/CommandDelegate.qml" line="54"/>
+        <location filename="../qml/components/CommandDelegate.qml" line="57"/>
         <source>State and output will be unavailable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/components/CommandDelegate.qml" line="63"/>
+        <location filename="../qml/components/CommandDelegate.qml" line="66"/>
         <source>Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/components/CommandDelegate.qml" line="74"/>
+        <location filename="../qml/components/CommandDelegate.qml" line="77"/>
         <source>Edit as New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/components/CommandDelegate.qml" line="86"/>
+        <location filename="../qml/components/CommandDelegate.qml" line="89"/>
         <source>Stop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/components/CommandDelegate.qml" line="86"/>
+        <location filename="../qml/components/CommandDelegate.qml" line="89"/>
         <source>Remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/components/CommandDelegate.qml" line="106"/>
+        <location filename="../qml/components/CommandDelegate.qml" line="109"/>
         <source>Deleting</source>
         <translation type="unfinished"></translation>
     </message>
@@ -42,32 +65,32 @@
 <context>
     <name>CommandInfoView</name>
     <message>
-        <location filename="../qml/components/CommandInfoView.qml" line="70"/>
+        <location filename="../qml/components/CommandInfoView.qml" line="49"/>
         <source>Created %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/components/CommandInfoView.qml" line="80"/>
+        <location filename="../qml/components/CommandInfoView.qml" line="59"/>
         <source>Last run %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/components/CommandInfoView.qml" line="100"/>
+        <location filename="../qml/components/CommandInfoView.qml" line="79"/>
         <source>used %1 times</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/components/CommandInfoView.qml" line="111"/>
+        <location filename="../qml/components/CommandInfoView.qml" line="90"/>
         <source>in Fingerterm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/components/CommandInfoView.qml" line="111"/>
+        <location filename="../qml/components/CommandInfoView.qml" line="90"/>
         <source>inside app</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/components/CommandInfoView.qml" line="113"/>
+        <location filename="../qml/components/CommandInfoView.qml" line="92"/>
         <source>Run %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -312,7 +335,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="163"/>
+        <location filename="../qml/pages/MainPage.qml" line="164"/>
         <source>No commands to show yet</source>
         <translation type="unfinished"></translation>
     </message>
@@ -346,7 +369,7 @@
 <context>
     <name>ParameterInputs</name>
     <message>
-        <location filename="../qml/components/ParameterInputs.qml" line="20"/>
+        <location filename="../qml/components/ParameterInputs.qml" line="25"/>
         <source>Parameter $%1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -359,12 +382,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/components/ParameterSetup.qml" line="57"/>
+        <location filename="../qml/components/ParameterSetup.qml" line="61"/>
         <source>Remove this parameter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/components/ParameterSetup.qml" line="66"/>
+        <location filename="../qml/components/ParameterSetup.qml" line="70"/>
         <source>Add parameter</source>
         <translation type="unfinished"></translation>
     </message>
@@ -413,7 +436,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/ProcessOutputPage.qml" line="202"/>
+        <location filename="../qml/pages/ProcessOutputPage.qml" line="213"/>
         <source>Swipe around to see whole output</source>
         <translation type="unfinished"></translation>
     </message>

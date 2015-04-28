@@ -42,7 +42,7 @@ Dialog {
           placeholderText: label
 
           validator: CommandNameValidator {
-            command: root.command
+            command: root.editAsNew ? null : root.command
             model: root.modeller.commandsModel
           }
         }
