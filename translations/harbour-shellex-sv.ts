@@ -1,40 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="sv_SE">
+<TS version="2.1" language="sv_SE">
+<context>
+    <name>ComboBoxParameterSetup</name>
+    <message>
+        <location filename="../qml/parameterComponents/ComboBoxParameterSetup.qml" line="10"/>
+        <source>Parameter for set of options. Preferable to use less than 6 values.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/parameterComponents/ComboBoxParameterSetup.qml" line="45"/>
+        <source>Values in format value1; value2 etc.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/parameterComponents/ComboBoxParameterSetup.qml" line="72"/>
+        <source>index of default value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/parameterComponents/ComboBoxParameterSetup.qml" line="87"/>
+        <source>Parameter description</source>
+        <translation type="unfinished">Parameterbeskrivning</translation>
+    </message>
+</context>
 <context>
     <name>CommandDelegate</name>
     <message>
-        <location filename="../qml/components/CommandDelegate.qml" line="38"/>
+        <location filename="../qml/components/CommandDelegate.qml" line="41"/>
         <source>Run detached</source>
         <translation>Kör fristående</translation>
     </message>
     <message>
-        <location filename="../qml/components/CommandDelegate.qml" line="54"/>
+        <location filename="../qml/components/CommandDelegate.qml" line="57"/>
         <source>State and output will be unavailable</source>
         <translation>Status och utdata blir ej tillgänglig</translation>
     </message>
     <message>
-        <location filename="../qml/components/CommandDelegate.qml" line="63"/>
+        <location filename="../qml/components/CommandDelegate.qml" line="66"/>
         <source>Edit</source>
         <translation>Redigera</translation>
     </message>
     <message>
-        <location filename="../qml/components/CommandDelegate.qml" line="74"/>
+        <location filename="../qml/components/CommandDelegate.qml" line="77"/>
         <source>Edit as New</source>
         <translation>Redigera som nytt</translation>
     </message>
     <message>
-        <location filename="../qml/components/CommandDelegate.qml" line="86"/>
+        <location filename="../qml/components/CommandDelegate.qml" line="89"/>
         <source>Stop</source>
         <translation>Stopp</translation>
     </message>
     <message>
-        <location filename="../qml/components/CommandDelegate.qml" line="86"/>
+        <location filename="../qml/components/CommandDelegate.qml" line="89"/>
         <source>Remove</source>
         <translation>Ta bort</translation>
     </message>
     <message>
-        <location filename="../qml/components/CommandDelegate.qml" line="106"/>
+        <location filename="../qml/components/CommandDelegate.qml" line="109"/>
         <source>Deleting</source>
         <translation>Tar bort</translation>
     </message>
@@ -42,32 +65,32 @@
 <context>
     <name>CommandInfoView</name>
     <message>
-        <location filename="../qml/components/CommandInfoView.qml" line="70"/>
+        <location filename="../qml/components/CommandInfoView.qml" line="49"/>
         <source>Created %1</source>
         <translation>Skapad %1</translation>
     </message>
     <message>
-        <location filename="../qml/components/CommandInfoView.qml" line="80"/>
+        <location filename="../qml/components/CommandInfoView.qml" line="59"/>
         <source>Last run %1</source>
         <translation>Senast använd %1</translation>
     </message>
     <message>
-        <location filename="../qml/components/CommandInfoView.qml" line="100"/>
+        <location filename="../qml/components/CommandInfoView.qml" line="79"/>
         <source>used %1 times</source>
         <translation>använd %1 gånger</translation>
     </message>
     <message>
-        <location filename="../qml/components/CommandInfoView.qml" line="111"/>
+        <location filename="../qml/components/CommandInfoView.qml" line="90"/>
         <source>in Fingerterm</source>
         <translation>i Fingerterm</translation>
     </message>
     <message>
-        <location filename="../qml/components/CommandInfoView.qml" line="111"/>
+        <location filename="../qml/components/CommandInfoView.qml" line="90"/>
         <source>inside app</source>
         <translation>i appen</translation>
     </message>
     <message>
-        <location filename="../qml/components/CommandInfoView.qml" line="113"/>
+        <location filename="../qml/components/CommandInfoView.qml" line="92"/>
         <source>Run %1</source>
         <translation>Kör %1</translation>
     </message>
@@ -234,27 +257,32 @@
         <translation>Återställ gesttips vid Spara</translation>
     </message>
     <message>
-        <location filename="../qml/pages/GlobalSettingsPage.qml" line="36"/>
+        <location filename="../qml/pages/GlobalSettingsPage.qml" line="39"/>
+        <source>Reset parameter components to original files (requires app restart)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/GlobalSettingsPage.qml" line="43"/>
         <source>About</source>
         <translation>Om</translation>
     </message>
     <message>
-        <location filename="../qml/pages/GlobalSettingsPage.qml" line="47"/>
+        <location filename="../qml/pages/GlobalSettingsPage.qml" line="54"/>
         <source>Author: %1</source>
         <translation>Utvecklare: %1</translation>
     </message>
     <message>
-        <location filename="../qml/pages/GlobalSettingsPage.qml" line="61"/>
+        <location filename="../qml/pages/GlobalSettingsPage.qml" line="68"/>
         <source>Version: %1</source>
         <translation>Version: %1</translation>
     </message>
     <message>
-        <location filename="../qml/pages/GlobalSettingsPage.qml" line="70"/>
+        <location filename="../qml/pages/GlobalSettingsPage.qml" line="77"/>
         <source>License: %1</source>
         <translation>Licens: %1</translation>
     </message>
     <message>
-        <location filename="../qml/pages/GlobalSettingsPage.qml" line="76"/>
+        <location filename="../qml/pages/GlobalSettingsPage.qml" line="83"/>
         <source>Source at Github</source>
         <translation>Källkod på GitHub</translation>
     </message>
@@ -312,7 +340,7 @@
         <translation>Snabbkommando...</translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="163"/>
+        <location filename="../qml/pages/MainPage.qml" line="164"/>
         <source>No commands to show yet</source>
         <translation>Inga kommandon att visa än</translation>
     </message>
@@ -346,7 +374,7 @@
 <context>
     <name>ParameterInputs</name>
     <message>
-        <location filename="../qml/components/ParameterInputs.qml" line="20"/>
+        <location filename="../qml/components/ParameterInputs.qml" line="25"/>
         <source>Parameter $%1</source>
         <translation>Parameter $%1</translation>
     </message>
@@ -359,12 +387,12 @@
         <translation>Parameter $%1</translation>
     </message>
     <message>
-        <location filename="../qml/components/ParameterSetup.qml" line="57"/>
+        <location filename="../qml/components/ParameterSetup.qml" line="88"/>
         <source>Remove this parameter</source>
         <translation>Ta bort den här parametern</translation>
     </message>
     <message>
-        <location filename="../qml/components/ParameterSetup.qml" line="66"/>
+        <location filename="../qml/components/ParameterSetup.qml" line="99"/>
         <source>Add parameter</source>
         <translation>Lägg till parameter</translation>
     </message>
@@ -413,7 +441,7 @@
         <translation>Visa alternativ</translation>
     </message>
     <message>
-        <location filename="../qml/pages/ProcessOutputPage.qml" line="202"/>
+        <location filename="../qml/pages/ProcessOutputPage.qml" line="213"/>
         <source>Swipe around to see whole output</source>
         <translation>Svep runt för att se all utdata</translation>
     </message>

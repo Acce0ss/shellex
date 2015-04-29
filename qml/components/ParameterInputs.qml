@@ -40,10 +40,18 @@ Column {
             if(inputElement.item.acceptableInputs)
             {
               root._acceptableInputCount++;
+              if(root._acceptableInputCount > root.count)
+              {
+                root._acceptableInputCount = root.count;
+              }
             }
             else
             {
               root._acceptableInputCount--;
+              if(root._acceptableInputCount < 0)
+              {
+                root._acceptableInputCount = 0;
+              }
             }
           }
         }
@@ -54,7 +62,6 @@ Column {
         }
       }
     }
-
   }
 
   ListModel {

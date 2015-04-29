@@ -6,22 +6,22 @@
     <message>
         <location filename="../qml/parameterComponents/ComboBoxParameterSetup.qml" line="10"/>
         <source>Parameter for set of options. Preferable to use less than 6 values.</source>
-        <translation type="unfinished"></translation>
+        <translation>Parametri vaihtoehtojen valinnalle.</translation>
     </message>
     <message>
         <location filename="../qml/parameterComponents/ComboBoxParameterSetup.qml" line="45"/>
         <source>Values in format value1; value2 etc.</source>
-        <translation type="unfinished"></translation>
+        <translation>Arvot muodossa arvo1; arvo2 jne.</translation>
     </message>
     <message>
         <location filename="../qml/parameterComponents/ComboBoxParameterSetup.qml" line="72"/>
         <source>index of default value</source>
-        <translation type="unfinished"></translation>
+        <translation>Oletusarvon indeksi</translation>
     </message>
     <message>
         <location filename="../qml/parameterComponents/ComboBoxParameterSetup.qml" line="87"/>
         <source>Parameter description</source>
-        <translation type="unfinished">Parametrin kuvaus</translation>
+        <translation>Parametrin kuvaus</translation>
     </message>
 </context>
 <context>
@@ -257,27 +257,32 @@
         <translation>Näytä eleohjeet uudelleen tallennuksen jälkeen</translation>
     </message>
     <message>
-        <location filename="../qml/pages/GlobalSettingsPage.qml" line="36"/>
+        <location filename="../qml/pages/GlobalSettingsPage.qml" line="39"/>
+        <source>Reset parameter components to original files (requires app restart)</source>
+        <translation>Palauta alkuperäiset parametrikomponenttien tiedostot (vaatii sovelluksen uudelleenkäynnistyksen)</translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/GlobalSettingsPage.qml" line="43"/>
         <source>About</source>
         <translation>Tietoja</translation>
     </message>
     <message>
-        <location filename="../qml/pages/GlobalSettingsPage.qml" line="47"/>
+        <location filename="../qml/pages/GlobalSettingsPage.qml" line="54"/>
         <source>Author: %1</source>
         <translation>Tekijä: %1</translation>
     </message>
     <message>
-        <location filename="../qml/pages/GlobalSettingsPage.qml" line="61"/>
+        <location filename="../qml/pages/GlobalSettingsPage.qml" line="68"/>
         <source>Version: %1</source>
         <translation>Versio: %1</translation>
     </message>
     <message>
-        <location filename="../qml/pages/GlobalSettingsPage.qml" line="70"/>
+        <location filename="../qml/pages/GlobalSettingsPage.qml" line="77"/>
         <source>License: %1</source>
         <translation>Lisenssi: %1</translation>
     </message>
     <message>
-        <location filename="../qml/pages/GlobalSettingsPage.qml" line="76"/>
+        <location filename="../qml/pages/GlobalSettingsPage.qml" line="83"/>
         <source>Source at Github</source>
         <translation>Lähdekoodi Githubissa</translation>
     </message>
@@ -382,12 +387,12 @@
         <translation>Parametri $%1</translation>
     </message>
     <message>
-        <location filename="../qml/components/ParameterSetup.qml" line="61"/>
+        <location filename="../qml/components/ParameterSetup.qml" line="88"/>
         <source>Remove this parameter</source>
         <translation>Poista parametri</translation>
     </message>
     <message>
-        <location filename="../qml/components/ParameterSetup.qml" line="70"/>
+        <location filename="../qml/components/ParameterSetup.qml" line="99"/>
         <source>Add parameter</source>
         <translation>Lisää parametri</translation>
     </message>

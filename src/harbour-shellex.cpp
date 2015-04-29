@@ -35,16 +35,23 @@ int main(int argc, char *argv[])
     paramCompos.mkpath(paramCompos.absolutePath());
   }
 
-  for(int i = 0; i < files.count(); i++)
-  {
-    QString fileName = paramCompos.absolutePath().append("/").append(files.at(i));
-    if(QFile::exists(fileName))
-    {
-      QFile::remove(fileName);
-    }
-    QFile::copy(packageParamCompos.absoluteFilePath(files.at(i)),
-              fileName);
+  Settings globalSettings;
+  globalSettings.setupConfig("harbour-shellex", "harbour-shellex");
 
+  if(globalSettings.readSetting("resetParameterComponents", true, Settings::Bool).toBool())
+  {
+
+    for(int i = 0; i < files.count(); i++)
+    {
+      QString fileName = paramCompos.absolutePath().append("/").append(files.at(i));
+      if(QFile::exists(fileName))
+      {
+        QFile::remove(fileName);
+      }
+      QFile::copy(packageParamCompos.absoluteFilePath(files.at(i)),
+                  fileName);
+
+    }
   }
 
   qmlRegisterType<CommandNameValidator>("harbour.shellex", 1, 0, "CommandNameValidator");

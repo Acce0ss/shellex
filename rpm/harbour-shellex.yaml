@@ -8,7 +8,7 @@ License: LICENSE
 Sources:
 - '%{name}-%{version}.tar.bz2'
 Description: |
-  Short description of my SailfishOS Application
+  Application for running shell commands from user interface
 Configure: none
 Builder: qtc5
 PkgConfigBR:

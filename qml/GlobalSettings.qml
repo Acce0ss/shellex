@@ -5,19 +5,25 @@ Settings {
     id: root
 
     property int timesHintShown
+    property bool resetParameterComponents
 
     Component.onCompleted: {
-        setupConfig("harbour-shellex", "harbour-shellex");
+      setupConfig("harbour-shellex", "harbour-shellex");
 
-        timesHintShown = readSetting("timesHintShown", 0, Settings.Int);
+      timesHintShown = readSetting("timesHintShown", 0, Settings.Int);
+      resetParameterComponents = false;
 
     }
 
     onTimesHintShownChanged: {
-        writeSetting("timesHintShown", timesHintShown);
+      writeSetting("timesHintShown", timesHintShown);
+    }
+
+    onResetParameterComponentsChanged: {
+      writeSetting("resetParameterComponents", resetParameterComponents);
     }
 
     Component.onDestruction: {
-        storeSettings();
+      storeSettings();
     }
 }

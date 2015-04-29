@@ -62,4 +62,4 @@ HEADERS += \
 # following CONFIG line
 CONFIG += sailfishapp_i18n
 CODECFORTR = UTF-8
-TRANSLATIONS += translations/harbour-shellex-fi.ts
+TRANSLATIONS += translations/harbour-shellex-fi.ts translations/harbour-shellex-sv.ts

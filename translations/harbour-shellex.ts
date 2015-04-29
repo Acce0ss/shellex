@@ -257,27 +257,32 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/GlobalSettingsPage.qml" line="36"/>
+        <location filename="../qml/pages/GlobalSettingsPage.qml" line="39"/>
+        <source>Reset parameter components to original files (requires app restart)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/pages/GlobalSettingsPage.qml" line="43"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/GlobalSettingsPage.qml" line="47"/>
+        <location filename="../qml/pages/GlobalSettingsPage.qml" line="54"/>
         <source>Author: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/GlobalSettingsPage.qml" line="61"/>
+        <location filename="../qml/pages/GlobalSettingsPage.qml" line="68"/>
         <source>Version: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/GlobalSettingsPage.qml" line="70"/>
+        <location filename="../qml/pages/GlobalSettingsPage.qml" line="77"/>
         <source>License: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/GlobalSettingsPage.qml" line="76"/>
+        <location filename="../qml/pages/GlobalSettingsPage.qml" line="83"/>
         <source>Source at Github</source>
         <translation type="unfinished"></translation>
     </message>
@@ -382,12 +387,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/components/ParameterSetup.qml" line="61"/>
+        <location filename="../qml/components/ParameterSetup.qml" line="88"/>
         <source>Remove this parameter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/components/ParameterSetup.qml" line="70"/>
+        <location filename="../qml/components/ParameterSetup.qml" line="99"/>
         <source>Add parameter</source>
         <translation type="unfinished"></translation>
     </message>

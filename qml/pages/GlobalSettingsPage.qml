@@ -32,6 +32,13 @@ Dialog {
                 text: qsTr("Reset gesture hints on save")
             }
 
+            TextSwitch {
+                id: resetParameterComponentsSwitch
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                text: qsTr("Reset parameter components to original files (requires app restart)")
+            }
+
             SectionHeader {
                 text: qsTr("About")
             }
@@ -86,7 +93,12 @@ Dialog {
     onAccepted: {
         if(resetHints.checked)
         {
-            globalSettings.timesHintShown = 0;
+          globalSettings.timesHintShown = 0;
+        }
+
+        if(resetParameterComponentsSwitch.checked)
+        {
+          globalSettings.resetParameterComponents = true;
         }
 
         globalSettings.storeSettings();

@@ -5,8 +5,8 @@ ComboBox {
 
   id: root
 
-  //function to initialize input, detailsObject must of the format
-  //spesified in the respective *ParameterSetup.qml
+  //function to initialize input, detailsObject must be of the format
+  //specified in the respective *ParameterSetup.qml
   //Need to be provided by this name!
   function initializeParameter(detailsObject) {
 
@@ -21,7 +21,7 @@ ComboBox {
     itemRepeater.model = tmp.split(";");
 
 
-    defaultIndex = detailsObject.defaultValueIndex;
+    defaultIndex = detailsObject.defaultValueIndex-1;
 
   }
   property string parameterValue: currentItem.text  //Need to be provided by this name!
@@ -38,10 +38,9 @@ ComboBox {
 
       MenuItem {
         text: modelData
-      }
-
-      onModelChanged: {
-        root.currentIndex = root.defaultIndex
+        Component.onCompleted: {
+          root.currentIndex = root.defaultIndex
+        }
       }
     }
 
