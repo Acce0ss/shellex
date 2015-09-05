@@ -20,7 +20,7 @@
 
 int main(int argc, char *argv[])
 {
-  QGuiApplication *app = SailfishApp::application(argc, argv);
+  QScopedPointer<QGuiApplication> app( SailfishApp::application(argc, argv));
 
   app->setOrganizationName("harbour-shellex");
   app->setApplicationName("harbour-shellex");
