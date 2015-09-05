@@ -6,22 +6,22 @@
     <message>
         <location filename="../qml/parameterComponents/ComboBoxParameterSetup.qml" line="10"/>
         <source>Parameter for set of options. Preferable to use less than 6 values.</source>
-        <translation type="unfinished"></translation>
+        <translation>Parameter för uppsättning alternativ. Använd helst mindre än 6 värden.</translation>
     </message>
     <message>
         <location filename="../qml/parameterComponents/ComboBoxParameterSetup.qml" line="45"/>
         <source>Values in format value1; value2 etc.</source>
-        <translation type="unfinished"></translation>
+        <translation>Värden i formatet, värde1; värde2 etc.</translation>
     </message>
     <message>
         <location filename="../qml/parameterComponents/ComboBoxParameterSetup.qml" line="72"/>
         <source>index of default value</source>
-        <translation type="unfinished"></translation>
+        <translation>index för standardvärde</translation>
     </message>
     <message>
         <location filename="../qml/parameterComponents/ComboBoxParameterSetup.qml" line="87"/>
         <source>Parameter description</source>
-        <translation type="unfinished">Parameterbeskrivning</translation>
+        <translation>Parameterbeskrivning</translation>
     </message>
 </context>
 <context>
@@ -259,7 +259,7 @@
     <message>
         <location filename="../qml/pages/GlobalSettingsPage.qml" line="39"/>
         <source>Reset parameter components to original files (requires app restart)</source>
-        <translation type="unfinished"></translation>
+        <translation>Återställ parameterkomponenter till originalfiler (kräver app-omstart)</translation>
     </message>
     <message>
         <location filename="../qml/pages/GlobalSettingsPage.qml" line="43"/>
@@ -622,3 +622,4 @@
     </message>
 </context>
 </TS>
+
