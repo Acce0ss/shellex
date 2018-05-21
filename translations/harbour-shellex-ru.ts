@@ -59,7 +59,7 @@
     </message>
     <message>
         <source>Last run %1</source>
-        <translation>Последний запуск %1</translation>
+        <translation>Запуск %1</translation>
     </message>
     <message>
         <source>used %1 times</source>
@@ -389,7 +389,7 @@
     <message>
         <source>%1s</source>
         <comment>make time into plural</comment>
-        <translation>%1s</translation>
+        <translation>%1</translation>
     </message>
     <message>
         <source>%1 %2 ago</source>
