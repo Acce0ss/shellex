@@ -1,7 +1,7 @@
 shellex
 =======
 
-Author: Asser Lähdemäki <firstname (at) lahdemaki.fi>
+Author: Asser Lähdemäki <firstname.lastname(at)gmail.com>
 
 Licensed under BSD 3 clause license, see LICENSE.
 
