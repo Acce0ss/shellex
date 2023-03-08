@@ -5,3 +5,6 @@ Name=ShellEx
 Icon=harbour-shellex
 Exec=harbour-shellex
 
+[X-Sailjail]
+Sandboxing=Disabled
+
