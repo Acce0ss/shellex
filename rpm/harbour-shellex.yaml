@@ -4,7 +4,7 @@ Version: 0.4
 Release: 1
 Group: Qt/Qt
 URL: http://github.com/Acce0ss/ShellEx
-License: LICENSE
+License: BSD-3-Clause
 Sources:
 - '%{name}-%{version}.tar.bz2'
 Description: |

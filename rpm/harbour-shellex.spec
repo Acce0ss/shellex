@@ -16,7 +16,7 @@ Summary:    An application that offers shortcuts command-line
 Version:    0.4
 Release:    1
 Group:      Qt/Qt
-License:    LICENSE
+License:    BSD-3-Clause
 URL:        http://github.com/Acce0ss/ShellEx
 Source0:    %{name}-%{version}.tar.bz2
 Source100:  harbour-shellex.yaml
